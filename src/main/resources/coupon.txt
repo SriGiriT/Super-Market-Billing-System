@@ -1,0 +1,4 @@
+FIRST500#0.0#Applicable only for first time#27/10/2024#500
+OFFER50#500.0#Applicable only if total Amount > 500#27/10/2024#50%
+OFFER30#300.0#Applicable only if total Amount > 300#27/10/2024#30%
+FIRST1000#1000.0#Applicable only if total Amount > 1000#27/10/2024#1000
