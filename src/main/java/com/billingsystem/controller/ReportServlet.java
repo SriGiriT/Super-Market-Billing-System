@@ -69,7 +69,7 @@ public class ReportServlet extends HttpServlet {
 	            	resultSet = reportService.getLowStockProducts();
 	            	title = "Low Stock";
 	            	reportTitle.addAll(Arrays.asList("ProductID", "Product Name", "Stock Left"));
-	            	actualTitle.addAll(Arrays.asList("id", "name", "stockLeft"));
+	            	actualTitle.addAll(Arrays.asList("id", "name", "stock_left"));
 	                break;
 	               
 	            case "frequentlyBoughtItem":

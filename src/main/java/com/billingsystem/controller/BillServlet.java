@@ -34,7 +34,7 @@ public class BillServlet extends HttpServlet {
         Cart cart = (Cart) session.getAttribute("cart");
         User user = (User) session.getAttribute("user"); 
         double totalAmount = Double.parseDouble(request.getParameter("overallAmount"));
-        double providedOffer = Double.parseDouble(request.getParameter("providedOffer"));
+        double providedOffer = Double.parseDouble(request.getParameter("providedOffer") != null && !request.getParameter("providedOffer").isEmpty() ? request.getParameter("providedOffer") : "0");
         if(user.haveCreditForTransaction(totalAmount)) {
         
         boolean stockAvailable = true;

@@ -1,6 +1,8 @@
 package com.billingsystem.controller;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,11 +22,30 @@ public class SignupServlet extends HttpServlet {
     	String userName = request.getParameter("userName");
         String phoneNumber = request.getParameter("phoneNumber");
         String password = request.getParameter("password");
+        if(!isValidPassword(password)) {
+        	request.setAttribute("errorMessage", "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        	request.getRequestDispatcher("signup.jsp").forward(request, response);
+        	return;
+        }
         String hashedPassword = PasswordUtil.hashPassword(password); 
         String email = request.getParameter("email");
 
         UserService userService = new UserService();
         
+        Pattern pattern = Pattern.compile("\\d{10}");
+        Matcher matcher = pattern.matcher(phoneNumber);
+        if(!matcher.matches()) {
+        	request.setAttribute("errorMessage", "Please Enter a valid Mobile number");
+        	request.getRequestDispatcher("signup.jsp").forward(request, response);
+        	return;
+        }
+        pattern = Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+        matcher = pattern.matcher(email);
+        if(!matcher.matches()) {
+        	request.setAttribute("errorMessage", "Please Enter a valid Email Address");
+        	request.getRequestDispatcher("signup.jsp").forward(request, response);
+        	return;
+        }
         User existingUser = userService.checkUser(phoneNumber);
         if (existingUser != null) {
             request.setAttribute("errorMessage", "Mobile number already registered.");
@@ -48,4 +69,26 @@ public class SignupServlet extends HttpServlet {
             request.getRequestDispatcher("signup.jsp").forward(request, response);
         }
     }
+	
+	
+    private boolean isValidPassword(String password) {
+        if (password.length() < 8) {
+            return false;
+        }
+
+        boolean hasUppercase = false;
+        boolean hasLowercase = false;
+        boolean hasNumber = false;
+        boolean hasSpecialChar = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUppercase = true;
+            else if (Character.isLowerCase(c)) hasLowercase = true;
+            else if (Character.isDigit(c)) hasNumber = true;
+            else if (!Character.isLetterOrDigit(c)) hasSpecialChar = true;
+        }
+
+        return hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
+    }
+	
 }

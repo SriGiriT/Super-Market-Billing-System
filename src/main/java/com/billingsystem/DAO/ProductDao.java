@@ -20,9 +20,9 @@ public class ProductDao {
                 product.setId(rs.getLong("id"));
                 product.setName(rs.getString("name"));
                 product.setPrice(rs.getDouble("price"));
-                product.setStockLeft(rs.getInt("stockLeft"));
-                product.setUsualStock(rs.getInt("usualStock"));
-                product.setTotalSold(rs.getInt("totalSold"));
+                product.setStockLeft(rs.getInt("stock_left"));
+                product.setUsualStock(rs.getInt("usual_stock"));
+                product.setTotalSold(rs.getInt("total_sold_out"));
                 product.setDescription(rs.getString("description"));
                 products.add(product);
             }
@@ -43,9 +43,9 @@ public class ProductDao {
                 product.setId(rs.getLong("id"));
                 product.setName(rs.getString("name"));
                 product.setPrice(rs.getDouble("price"));
-                product.setStockLeft(rs.getInt("stockLeft"));
-                product.setUsualStock(rs.getInt("usualStock"));
-                product.setTotalSold(rs.getInt("totalSold"));
+                product.setStockLeft(rs.getInt("stock_left"));
+                product.setUsualStock(rs.getInt("usual_stock"));
+                product.setTotalSold(rs.getInt("total_sold_out"));
                 product.setDescription(rs.getString("description"));
 				return product;
 			}
@@ -56,7 +56,7 @@ public class ProductDao {
 	}
 	
 	  public void updateProduct(Product product) {
-	        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stockLeft = ?, usualStock = ? WHERE id = ?";
+	        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock_left = ?, usual_stock = ? WHERE id = ?";
 
 	        try {
 	        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
@@ -73,7 +73,7 @@ public class ProductDao {
 	    }
 	  
 	  public void updateProductStock(Product product) {
-		  String sql = "UPDATE products SET stockLeft=? WHERE id=?";
+		  String sql = "UPDATE products SET stock_left=? WHERE id=?";
 		  try  {
 			  PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
 	            ps.setInt(1, product.getStockLeft());

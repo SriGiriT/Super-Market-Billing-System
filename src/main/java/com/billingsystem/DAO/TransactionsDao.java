@@ -11,7 +11,7 @@ public class TransactionsDao {
 	public void saveTransactions(Transactions transaction) {
 		
 		try {
-			String sql = "INSERT INTO Transactions(customer_id, amount, transaction_date) VALUES (?, ?, ?)";
+			String sql = "INSERT INTO Transactions(user_id, amount, transaction_date) VALUES (?, ?, ?)";
 			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setLong(1, transaction.getCustomer_id());
 			ps.setDouble(2, transaction.getAmount());

@@ -87,9 +87,9 @@ public class ReportDao {
 	public ResultSet getLowStockProducts() {
 		ResultSet rs = null;
 		try {
-			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT id, name, stockLeft "
+			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT id, name, stock_left "
 					+ "FROM products "
-					+ "WHERE stockLeft < usualStock;");
+					+ "WHERE stock_left < usual_stock;");
 			rs = ps.executeQuery();
 		}catch(Exception e) {
 			e.printStackTrace();
