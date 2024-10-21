@@ -21,6 +21,7 @@ import com.billingsystem.service.ProductService;
 import com.billingsystem.service.TransactionsService;
 import com.billingsystem.service.UserService;
 import com.billingsystem.utility.EmailUtility;
+import com.billingsystem.utility.LoggerUtil;
 
 @WebServlet("/BillServlet")
 public class BillServlet extends HttpServlet {
@@ -77,6 +78,7 @@ public class BillServlet extends HttpServlet {
                     EmailUtility.sendInvoiceEmail(user.getEmail(),subject ,  invoice, providedOffer);
                     
                 } catch (Exception e) {
+                	LoggerUtil.getInstance().logException("Error in Updating invoice", e);
                     e.printStackTrace();
                 }
 

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.billingsystem.Model.User;
 import com.billingsystem.Model.User.Role;
 import com.billingsystem.utility.DBConnectionUtil;
+import com.billingsystem.utility.LoggerUtil;
 
 public class UserDao {
     public User findUserByPhoneNumber(String phoneNumber) {
@@ -28,6 +29,7 @@ public class UserDao {
                 return user;
             }
         } catch (SQLException e) {
+        	LoggerUtil.getInstance().logException("error in findUserByPhoneNumber", e);
             e.printStackTrace();
         }
         return null;

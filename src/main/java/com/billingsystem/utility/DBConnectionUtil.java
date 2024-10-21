@@ -28,10 +28,12 @@ public class DBConnectionUtil {
     }
     
     public static DBConnectionUtil getInstance() throws SQLException{
-    	if(instance == null) {
-    		instance = new DBConnectionUtil();
-    	}else if(instance.getConnection().isClosed()){
-    		instance = new DBConnectionUtil();
+    	if(instance == null || instance.getConnection().isClosed()) {
+    		synchronized(DBConnectionUtil.class) {
+    			if(instance == null) {
+    				instance = new DBConnectionUtil();
+    			}
+    		}
     	}
     	return instance;
     }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.service.UserService;
+import com.billingsystem.utility.LoggerUtil;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -25,9 +26,11 @@ public class LoginServlet extends HttpServlet {
         if (user != null) {
             HttpSession session = request.getSession();
             session.setAttribute("user", user);
+            LoggerUtil.getInstance().getLogger().debug("Logged in successss");
             response.sendRedirect("home.jsp");
         } else {
             request.setAttribute("errorMessage", "Invalid credentials!");
+            LoggerUtil.getInstance().logWarn("Invalid credentials while loggin in");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }

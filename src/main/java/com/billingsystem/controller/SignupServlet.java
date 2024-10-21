@@ -79,16 +79,14 @@ public class SignupServlet extends HttpServlet {
         boolean hasUppercase = false;
         boolean hasLowercase = false;
         boolean hasNumber = false;
-        boolean hasSpecialChar = false;
 
         for (char c : password.toCharArray()) {
             if (Character.isUpperCase(c)) hasUppercase = true;
             else if (Character.isLowerCase(c)) hasLowercase = true;
             else if (Character.isDigit(c)) hasNumber = true;
-            else if (!Character.isLetterOrDigit(c)) hasSpecialChar = true;
         }
 
-        return hasUppercase && hasLowercase && hasNumber && hasSpecialChar;
+        return hasUppercase && hasLowercase && hasNumber;
     }
 	
 }
