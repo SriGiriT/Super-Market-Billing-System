@@ -3,6 +3,7 @@ package com.billingsystem.service;
 
 import com.billingsystem.DAO.UserDao;
 import com.billingsystem.Model.User;
+import com.billingsystem.utility.LoggerUtil;
 import com.billingsystem.utility.PasswordUtil;
 
 public class UserService {

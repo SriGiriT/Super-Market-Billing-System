@@ -1,7 +1,7 @@
 
 <configuration>
 
-    <property name="HOME_LOG" value="C:\\Users\\srigiri-20969\\prog\\git_clone\\Super-Market-Billing-System\\logs\\app.log"/>
+    <property name="HOME_LOG" value="C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\logs\\app.log"/>
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">

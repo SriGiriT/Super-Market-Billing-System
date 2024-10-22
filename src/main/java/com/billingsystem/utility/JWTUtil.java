@@ -9,7 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 
 public class JWTUtil {
-	private static final String SECRET = "H(&8(H(&8h963";
+	private static final String SECRET = System.getenv("JWT_SECRET_KEY");
 	private static final long EXP_TIME = 5 * 60 * 1000;
 	
 	public static String generateToken(String phoneNumber, String role) {

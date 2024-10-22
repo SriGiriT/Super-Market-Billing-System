@@ -20,7 +20,6 @@ import com.billingsystem.service.UserService;
 import com.billingsystem.utility.JWTUtil;
 import com.billingsystem.utility.LoggerUtil;
 
-@WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
     @Override
@@ -46,8 +45,12 @@ public class AuthenticationFilter implements Filter {
             if (decodedJWT != null) {
                 String phoneNumber = JWTUtil.getPhoneNumber(decodedJWT);
                 String role = JWTUtil.getRole(decodedJWT);
-                User user = userService.checkUser(phoneNumber);
-                session.setAttribute("user", user);
+                User user = (User)(session != null ? session.getAttribute("user") : null);
+                if(user == null) {
+                	user = userService.checkUser(phoneNumber);
+                	session = httpRequest.getSession(true);
+                	session.setAttribute("user", user);
+                }
                 if(user==null) {
                 	LoggerUtil.getInstance().getLogger().error("Invalid auth-token in filters");
                 }

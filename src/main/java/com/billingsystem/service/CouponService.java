@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class CouponService {
 	public Map<String, List<String>> getCouponCodes(){
 		Map<String, List<String>> hashMap = new HashMap<>();
-		File file = new File("C:\\Users\\srigiri-20969\\prog\\git_clone\\Super-Market-Billing-System\\src\\main\\resources\\coupon.txt");
+		File file = new File("C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\temp\\coupon.txt");
 		try (Scanner sc = new Scanner(file)){
 			while(sc.hasNextLine()) {
 				List<String> eachLine = Arrays.asList(sc.nextLine().split("#"));

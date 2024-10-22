@@ -34,7 +34,7 @@ public class ReportServlet extends HttpServlet {
 	      ResultSet resultSet = null;
 	      User.Role role = user.getRole();
 	      switch(role) {
-	      	case User.Role.ADMIN:
+	      	case ADMIN:
 	      		 switch (action) {
 		            case "topSellingProducts":
 		                resultSet = reportService.getTopSellingProducts();
@@ -93,7 +93,7 @@ public class ReportServlet extends HttpServlet {
 		                break;
 		        }
 	      		break;
-	      	case User.Role.CUSTOMER:
+	      	case CUSTOMER:
 	      		 switch (action) {
 		               
 		            case "frequentlyBoughtItem":

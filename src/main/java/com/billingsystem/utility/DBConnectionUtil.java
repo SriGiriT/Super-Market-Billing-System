@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DBConnectionUtil {
     private  final String URL = "jdbc:mysql://localhost:3306/super_market_billing";
     private  final String USER = "root";
-    private  final String PASSWORD = "G@$3@G@$3";
+    private  final String PASSWORD = System.getenv("DB_SECRET_PASSWORD");
     private static DBConnectionUtil instance;
     private Connection connection;
     
@@ -36,5 +36,16 @@ public class DBConnectionUtil {
     		}
     	}
     	return instance;
+    }
+    public void closeConnection() {
+        if (connection != null) {
+            try {
+                connection.close();
+                System.out.println("Database connection closed.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.err.println("Failed to close database connection.");
+            }
+        }
     }
 }
