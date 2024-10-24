@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.service.UserService;
@@ -22,13 +23,19 @@ public class SignupServlet extends HttpServlet {
     	String userName = request.getParameter("userName");
         String phoneNumber = request.getParameter("phoneNumber");
         String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        HttpSession session = request.getSession(false);
+        session.setAttribute("userName", userName);
+        session.setAttribute("phoneNumber", phoneNumber);
+        session.setAttribute("password", password);
+        session.setAttribute("email", email);
         if(!isValidPassword(password)) {
         	request.setAttribute("errorMessage", "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
         	request.getRequestDispatcher("signup.jsp").forward(request, response);
         	return;
         }
         String hashedPassword = PasswordUtil.hashPassword(password); 
-        String email = request.getParameter("email");
+        
 
         UserService userService = new UserService();
         
@@ -63,6 +70,7 @@ public class SignupServlet extends HttpServlet {
         boolean isRegistered = userService.createUser(user);
 
         if (isRegistered) {
+        	session.setAttribute("successMessage", "Signed up Successfully!!!");
             response.sendRedirect("login.jsp"); 
         } else {
             request.setAttribute("errorMessage", "Signup failed due to internal error.");

@@ -11,27 +11,33 @@ import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.service.UserService;
+import com.billingsystem.utility.LoggerUtil;
 import com.billingsystem.utility.PasswordUtil;
 
 @WebServlet("/changePassword")
 public class ChangePasswordController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-	private UserService UserService = new UserService();
+	private UserService userService = new UserService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         User loggedInUser = (User) session.getAttribute("user"); 
-
+        String existingPassword = request.getParameter("existingPassword");
         if (loggedInUser != null) {
-            String newPassword = request.getParameter("newPassword");
-
-            String hashedPassword = PasswordUtil.hashPassword(newPassword);
-            loggedInUser.setPassword(hashedPassword);
-            UserService.updatePassword(loggedInUser); 
-            response.sendRedirect("home.jsp");
+        	if(userService.login(loggedInUser.getPhoneNumber(), existingPassword) != null){
+        		String newPassword = request.getParameter("password");
+                String hashedPassword = PasswordUtil.hashPassword(newPassword);
+                loggedInUser.setPassword(hashedPassword);
+                userService.updatePassword(loggedInUser); 
+                request.setAttribute("successMessage", "Password Updated Successfully!");
+        	}else {
+        		request.setAttribute("errorMessage", "Existing Password is wrong, Try again!");
+        	}
         } else {
-            response.sendRedirect("login.jsp"); 
+        	
+            request.setAttribute("errorMessage", "Session Expired please login again!");
         }
+        request.getRequestDispatcher("change_password.jsp").forward(request, response);
     }
 }

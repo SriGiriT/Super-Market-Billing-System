@@ -5,8 +5,9 @@ import java.sql.ResultSet;
 import com.billingsystem.utility.DBConnectionUtil;
 
 public class ReportDao {
+	ResultSet rs = null;
 	public ResultSet getTopSessingProducts() {
-		ResultSet rs = null;
+		
 		try {
 			PreparedStatement ps =  DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT p.id, p.name, SUM(ii.quantity) AS total_quantity_sold "
 					+ "FROM products p "
@@ -24,7 +25,6 @@ public class ReportDao {
 	}
 
 	public ResultSet getTopCustomers() {
-		ResultSet rs = null;
 		try {
 			PreparedStatement ps =  DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT u.id, u.user_name, SUM(i.total_amount) AS total_spent " 
 					+ "FROM user u "
@@ -41,7 +41,6 @@ public class ReportDao {
 	}
 
 	public ResultSet getInactiveCustomers(){
-		ResultSet rs = null;
 		try {
 			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT u.id, u.user_name " 
 					+ "FROM user u "
@@ -55,7 +54,6 @@ public class ReportDao {
 		return rs;
 	}
 	public ResultSet getDailyRevenue(){
-		ResultSet rs = null;
 		try {
 			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT DATE(i.date) AS day, SUM(i.total_amount) AS total_revenue "
 					+ "FROM invoices i "
@@ -70,7 +68,6 @@ public class ReportDao {
 	}
 
 	public ResultSet getSignedUpButNoPurchase() {
-		ResultSet rs = null;
 		try {
 			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT u.id, u.user_name "
 					+ "FROM user u "
@@ -85,7 +82,6 @@ public class ReportDao {
 	}
 
 	public ResultSet getLowStockProducts() {
-		ResultSet rs = null;
 		try {
 			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT id, name, stock_left "
 					+ "FROM products "
@@ -98,7 +94,6 @@ public class ReportDao {
 	}
 
 	public ResultSet getfrequentlyBoughtItem(int user_id) {
-		ResultSet rs = null;
 		try {
 			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT p.id, p.name, SUM(ii.quantity) AS total_quantity_bought "
 					+ "FROM products p "
@@ -108,6 +103,82 @@ public class ReportDao {
 					+ "GROUP BY p.id, p.name "
 					+ "ORDER BY total_quantity_bought DESC;");
 			ps.setInt(1, user_id);
+			rs = ps.executeQuery();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public ResultSet getAllBillStatements(int userId) {
+		try {
+			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT total_amount, date, transaction_id from invoices where user_id = ?");
+			ps.setInt(1, userId);
+			rs = ps.executeQuery();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public ResultSet getTopCashier() {
+		try {
+			PreparedStatement ps =  DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT  "
+					+ "	u.id As cashier_id, "
+					+ "    u.user_name AS cashier_name, "
+					+ "    COUNT(t.id) AS transaction_count "
+					+ "FROM  "
+					+ "    transactions t "
+					+ "JOIN  "
+					+ "    user u ON t.cashier_id = u.id "
+					+ "WHERE  "
+					+ "    t.cashier_id IS NOT NULL "
+					+ "GROUP BY  "
+					+ "    u.id, u.user_name "
+					+ "ORDER BY  "
+					+ "    transaction_count DESC;");
+			
+			rs = ps.executeQuery();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public ResultSet getUnsoldProducts() {
+		try {
+			PreparedStatement ps =  DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT  "
+					+ "    p.id, "
+					+ "    p.name, "
+					+ "    p.stock_left, "
+					+ "    p.price "
+					+ "FROM  "
+					+ "    products p "
+					+ "LEFT JOIN  "
+					+ "    invoice_items ii ON p.id = ii.product_id "
+					+ "WHERE  "
+					+ "    ii.product_id IS NULL; "
+					);
+			
+			rs = ps.executeQuery();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return rs;
+	}
+
+	public ResultSet getOutOfStockProducts() {
+		try {
+			PreparedStatement ps =  DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT  "
+					+ "    id, "
+					+ "    name, "
+					+ "    price "
+					+ "FROM "
+					+ "    products "
+					+ "WHERE  "
+					+ "    stock_left = 0;"
+					);
+			
 			rs = ps.executeQuery();
 		}catch(Exception e) {
 			e.printStackTrace();

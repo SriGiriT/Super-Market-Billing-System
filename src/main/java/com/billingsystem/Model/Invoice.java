@@ -1,13 +1,14 @@
 package com.billingsystem.Model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Invoice {
     private int id;
     private User customer;      
     private Cart cart;         
     private double totalAmount;  
-    private Date date;        
+    private LocalDateTime date;        
     private int transaction_id;
 
     public int getId() {
@@ -42,11 +43,11 @@ public class Invoice {
         this.totalAmount = totalAmount;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 

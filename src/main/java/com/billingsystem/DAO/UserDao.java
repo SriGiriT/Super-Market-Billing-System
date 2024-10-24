@@ -3,6 +3,8 @@ package com.billingsystem.DAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.Model.User.Role;
@@ -98,6 +100,46 @@ public class UserDao {
     		return false;
     	}
     }
+
+
+
+	public Map<String, String> getUsersRoleDetails() {
+		String sql = "Select role, phone_number from user";
+		Map<String, String> userAndRole = new HashMap<>();
+		try {
+			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				userAndRole.put(rs.getString("phone_number"),rs.getString("role"));
+	            
+			}
+    		return userAndRole;
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return userAndRole;
+		}
+	}
+
+
+
+	public Map<String, Double> getUsersCreditDetails() {
+		String sql = "Select phone_number, current_credit from user";
+		Map<String, Double> userAndRole = new HashMap<>();
+		try {
+			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				userAndRole.put(rs.getString("phone_number"),rs.getDouble("current_credit"));
+	            
+			}
+    		return userAndRole;
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return userAndRole;
+		}
+	}
 
 
 }

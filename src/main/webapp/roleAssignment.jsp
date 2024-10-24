@@ -2,17 +2,54 @@
 <html>
 <head>
     <title>Assign Roles</title>
+    <script>
+        function updateExistingRole() {
+            const mobileNumberSelect = document.getElementById("mobileNumber");
+            const existingRoleField = document.getElementById("existingRole");
+            const roleSelect = document.getElementById("roleSelect");
+            const selectedMobileNumber = mobileNumberSelect.value;
+
+            const mobileRoles = {
+                <c:forEach var="entry" items="${userAndRole}">
+                    "<c:out value='${entry.key}'/>": "<c:out value='${entry.value}'/>",
+                </c:forEach>
+            };
+
+            const existingRole = mobileRoles[selectedMobileNumber] || '';
+            existingRoleField.value = existingRole;
+
+            const allRoles = ["CUSTOMER", "ADMIN", "CASHIER", "INVENTORY_MANAGER"];
+            roleSelect.innerHTML = ''; 
+
+            allRoles.forEach(role => {
+                if (role !== existingRole) {
+                    const option = document.createElement("option");
+                    option.value = role;
+                    option.text = role.charAt(0) + role.slice(1).toLowerCase().replace(/_/g, ' ');
+                    roleSelect.add(option);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
     <h2>Assign Roles</h2>
     <form action="assignRole" method="post">
-        Mobile Number: <input type="text" name="mobileNumber" required/><br/>
-        Role:
-        <select name="role">
-            <option value="CASHIER">Cashier</option>
-            <option value="INVENTORY_MANAGER">Inventory Manager</option>
-            <option value="ADMIN">Admin</option>
+        Mobile Number:
+        <select id="mobileNumber" name="mobileNumber" onchange="updateExistingRole()" required>
+            <option value="">Select Mobile Number</option>
+            <c:forEach var="entry" items="${userAndRole}">
+                <option value="<c:out value='${entry.key}'/>"><c:out value='${entry.key}'/></option>
+            </c:forEach>
         </select><br/>
+
+        Existing Role:
+        <input type="text" id="existingRole" name="existingRole" readonly/><br/>
+
+        Update to Role:
+        <select id="roleSelect" name="role" required>
+        </select><br/>
+
         <input type="submit" value="Assign Role"/>
     </form>
     <c:if test="${not empty message}">

@@ -30,6 +30,10 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         UserService userService = new UserService();
         Cookie[] cookies = httpRequest.getCookies();
+        if(httpRequest.getRequestURI().contains("signup")) {
+        	chain.doFilter(request, response);
+        	return;
+        }
         String token = null;
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -63,10 +67,10 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
         }
-
         if (!httpRequest.getRequestURI().contains("/login")) {
-            httpResponse.sendRedirect("login.jsp");
-        } else {
+        	httpResponse.sendRedirect("login.jsp");
+        } 
+        else {
             chain.doFilter(request, response);
         }
     }

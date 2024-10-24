@@ -44,7 +44,7 @@ public class ReportServlet extends HttpServlet {
 		                break;
 		                
 		            case "topCustomers":
-		            	 resultSet = reportService.getTopCustomers();
+		            	resultSet = reportService.getTopCustomers();
 		            	title = "Top Customers";
 		            	reportTitle.addAll(Arrays.asList("User ID", "User Name", "Total Spent"));
 		            	actualTitle.addAll(Arrays.asList("id", "user_name", "total_spent"));
@@ -56,7 +56,12 @@ public class ReportServlet extends HttpServlet {
 		            	reportTitle.addAll(Arrays.asList("User ID", "User Name"));
 		            	actualTitle.addAll(Arrays.asList("id", "user_name"));
 		                break;
-		                
+		            case "topCashier":
+		            	resultSet = reportService.getTopCashier();
+		            	title = "Cashiers Who Billed The Most";
+		            	reportTitle.addAll(Arrays.asList("Cashier ID", "Cashier Name", "Bill Count"));
+		            	actualTitle.addAll(Arrays.asList("cashier_id", "cashier_name", "transaction_count"));
+		            	break;
 		                
 		            case "dailyRevenue":
 		            	resultSet = reportService.getDailyRevenue();
@@ -86,7 +91,18 @@ public class ReportServlet extends HttpServlet {
 		            	reportTitle.addAll(Arrays.asList("Product ID", "Product Name", "Total Quantity Bought"));
 		            	actualTitle.addAll(Arrays.asList("id", "name", "total_quantity_bought"));
 		            	break;
-		            
+		            case "unsoldProducts":
+		            	resultSet = reportService.getUnsoldProducts();
+		            	title = "Unsold Products";
+		            	reportTitle.addAll(Arrays.asList("Product Id", "Product Name", "Stock Left", "Price"));
+		            	actualTitle.addAll(Arrays.asList("id", "name", "stock_left", "price"));
+		            	break;
+		            case "outOfStock":
+		            	resultSet = reportService.getOutOfStockProducts();
+		            	title = "Unsold Products";
+		            	reportTitle.addAll(Arrays.asList("Product Id", "Product Name", "Price"));
+		            	actualTitle.addAll(Arrays.asList("id", "name", "price"));
+		            	break;
 		            default:
 		                request.setAttribute("errorMessage", "Invalid report type.");
 		                request.getRequestDispatcher("reports.jsp").forward(request, response);;
@@ -94,16 +110,20 @@ public class ReportServlet extends HttpServlet {
 		        }
 	      		break;
 	      	case CUSTOMER:
+	      		 int userId = Integer.parseInt(request.getParameter("userId"));
 	      		 switch (action) {
-		               
 		            case "frequentlyBoughtItem":
-		            	int userId = Integer.parseInt(request.getParameter("userId"));
 		            	resultSet = reportService.getfrequentlyBoughtItem(userId);
 		            	title = "Frequently Bought Item";
 		            	reportTitle.addAll(Arrays.asList("Product ID", "Product Name", "Total Quantity Bought"));
 		            	actualTitle.addAll(Arrays.asList("id", "name", "total_quantity_bought"));
 		            	break;
-		                
+		            case "allBillStatements":
+		            	resultSet = reportService.getAllBillStatemetns(userId);
+		            	title = "All Bill Statements";
+		            	reportTitle.addAll(Arrays.asList("Total Amount", "Transaction Date", "Transaction ID"));
+		            	actualTitle.addAll(Arrays.asList("total_amount", "date", "transaction_id"));
+		            	break;
 		            default:
 		                request.setAttribute("errorMessage", "Invalid report type.");
 		                request.getRequestDispatcher("reports.jsp").forward(request, response);;

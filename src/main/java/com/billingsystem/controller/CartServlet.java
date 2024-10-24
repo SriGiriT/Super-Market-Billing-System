@@ -20,7 +20,7 @@ public class CartServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
-
+        System.out.println(cart);
         if (cart == null) {
             cart = new Cart();
             session.setAttribute("cart", cart);
@@ -40,7 +40,6 @@ public class CartServlet extends HttpServlet {
                 cart.addItem(product, quantity);
             }
         }
-
-        response.sendRedirect("cart.jsp");
+        response.sendRedirect("cashier.jsp");
     }
 }

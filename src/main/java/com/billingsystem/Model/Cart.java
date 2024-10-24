@@ -23,4 +23,12 @@ public class Cart {
     public List<CartItem> getItems() {
         return items;
     }
+    public void updateItemQuantity(int productId, int newQuantity) {
+        for (CartItem item : items) {
+            if (item.getProduct().getId() == productId) {
+                item.setQuantity(newQuantity);
+                break;
+            }
+        }
+    }
 }

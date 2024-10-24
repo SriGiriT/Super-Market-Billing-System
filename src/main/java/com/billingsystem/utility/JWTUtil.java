@@ -10,7 +10,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 
 public class JWTUtil {
 	private static final String SECRET = System.getenv("JWT_SECRET_KEY");
-	private static final long EXP_TIME = 5 * 60 * 1000;
+	private static final long EXP_TIME = 300 * 60 * 1000;
 	
 	public static String generateToken(String phoneNumber, String role) {
 		return JWT.create().withSubject(phoneNumber)

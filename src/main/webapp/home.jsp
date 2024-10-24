@@ -15,6 +15,10 @@
     response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
     response.setHeader("Pragma", "no-cache"); 
     response.setHeader("Expires", "0"); 
+    if(session.getAttribute("user") == null){
+    	response.sendRedirect("login.jsp");
+    }
+    session.removeAttribute("successMessage");
 	
     %>
     
@@ -23,7 +27,11 @@
 	<p>Information:<br/> Name: ${user.userName} <br/> Phone Number: ${user.phoneNumber} <br/>  Email: ${user.email} <br/>  Points: ${user.points} <br/>  Credits: ${user.current_credit} <br/> </p>
 	
 	<c:if test="${user.role == 'ADMIN'}">
-        <p><a href="roleAssignment.jsp">Assign Role</a></p>
+        <p><a href="loadUsersAndRoles">Assign Role</a></p>
+        <p><a href="loadUsersAndCredit">Add Credit</a></p>
+    </c:if>
+    <c:if test="${user.role == 'CASHIER'}">
+        <p><a href="cashier.jsp">Bill Items</a></p>
     </c:if>
     <c:if test="${user.role == 'ADMIN' || user.role == 'CUSTOMER'}">
     	<p><a href="reports.jsp">View Reports</a></p>

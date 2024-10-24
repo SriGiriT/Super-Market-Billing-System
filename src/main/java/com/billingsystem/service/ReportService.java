@@ -27,5 +27,17 @@ public class ReportService {
 	public ResultSet getfrequentlyBoughtItem(int userId) {
 		return reportDao.getfrequentlyBoughtItem(userId);
 	}
+	public ResultSet getAllBillStatemetns(int userId) {
+		return reportDao.getAllBillStatements(userId);
+	}
+	public ResultSet getTopCashier() {
+		return reportDao.getTopCashier();
+	}
+	public ResultSet getUnsoldProducts() {
+		return reportDao.getUnsoldProducts();
+	}
+	public ResultSet getOutOfStockProducts() {
+		return reportDao.getOutOfStockProducts();
+	}
 
 }

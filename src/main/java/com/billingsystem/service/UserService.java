@@ -1,9 +1,10 @@
 package com.billingsystem.service;
 
 
+import java.util.Map;
+
 import com.billingsystem.DAO.UserDao;
 import com.billingsystem.Model.User;
-import com.billingsystem.utility.LoggerUtil;
 import com.billingsystem.utility.PasswordUtil;
 
 public class UserService {
@@ -38,4 +39,12 @@ public class UserService {
     public boolean assignCurrentCredit(String phoneNumber, double current_credit) {
     	return userDao.assignCurrentCredit(phoneNumber, current_credit);
     }
+
+    public Map<String, String> getUsersRoleDetails() {
+		return userDao.getUsersRoleDetails();
+	}
+
+	public Map<String, Double> getUsersCreditDetails() {
+		return userDao.getUsersCreditDetails();
+	}
 }

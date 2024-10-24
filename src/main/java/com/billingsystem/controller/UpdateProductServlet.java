@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.Product;
+import com.billingsystem.Model.User;
 import com.billingsystem.service.ProductService;
 
 
@@ -21,24 +22,27 @@ public class UpdateProductServlet extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
-		Product product = (Product) session.getAttribute("product");
-		String productName = request.getParameter("name");
-		String description = request.getParameter("description").toString();
-		double price = Double.parseDouble(request.getParameter("sellingPrice"));
-		int stockLeft = Integer.parseInt(request.getParameter("stockLeft"));
-		int usualStock = Integer.parseInt(request.getParameter("usualStock"));
-		product.setName(productName);
-		product.setDescription(description);
-		product.setPrice(price);
-		product.setStockLeft(stockLeft);
-		product.setUsualStock(usualStock);
-		if(product != null) {
-			productService.updateProduct(product);
+		User user = (User)session.getAttribute("user");
+		if(user.getRole().toString() == "INVENTORY_MANAGER") {
+			Product product = (Product) session.getAttribute("product");
+			String productName = request.getParameter("name");
+			String description = request.getParameter("description");
+			double price = Double.parseDouble(request.getParameter("sellingPrice"));
+			int stockLeft = Integer.parseInt(request.getParameter("stockLeft"));
+			int usualStock = Integer.parseInt(request.getParameter("usualStock"));
+			product.setName(productName);
+			product.setDescription(description);
+			product.setPrice(price);
+			product.setStockLeft(stockLeft);
+			product.setUsualStock(usualStock);
+			if(product != null) {
+				productService.updateProduct(product);
+			}
+			List<Product> products = productService.getAllProducts();
+			request.setAttribute("products", products);
+			request.setAttribute("role", "INVENTORY_MANAGER");
+			request.getRequestDispatcher("/products.jsp").forward(request, response);
 		}
-		List<Product> products = productService.getAllProducts();
-		request.setAttribute("products", products);
-		request.setAttribute("role", "INVENTORY_MANAGER");
-		request.getRequestDispatcher("/products.jsp").forward(request, response);
 	}
 
 }

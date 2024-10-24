@@ -1,6 +1,8 @@
 package com.billingsystem.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -34,6 +36,12 @@ public class BillServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
         User user = (User) session.getAttribute("user"); 
+        Long cashierUserId = null;
+        if(user.getRole().toString().equals("CASHIER")) {
+        	LoggerUtil.getInstance().getLogger().debug("Is Cashier "+user.getId());
+        	cashierUserId = user.getId();
+        	user = userService.checkUser(session.getAttribute("customerPhoneNumber").toString());
+        }
         double totalAmount = Double.parseDouble(request.getParameter("overallAmount"));
         double providedOffer = Double.parseDouble(request.getParameter("providedOffer") != null && !request.getParameter("providedOffer").isEmpty() ? request.getParameter("providedOffer") : "0");
         if(user.haveCreditForTransaction(totalAmount)) {
@@ -58,9 +66,13 @@ public class BillServlet extends HttpServlet {
         if (stockAvailable) {
         	
         		Transactions transaction = new Transactions();
+        		if(cashierUserId != null) {
+        			LoggerUtil.getInstance().getLogger().debug("cashierID not null "+cashierUserId);
+        			transaction.setCashier_id(cashierUserId);
+        		}
             	transaction.setCustomer_id(user.getId());
             	transaction.setAmount(totalAmount);
-            	transaction.setTransaction_date(new Date());
+            	transaction.setTransaction_date(LocalDateTime.now());
             	transactionService.saveTransactions(transaction);
             	userService.assignCurrentCredit(user.getPhoneNumber(), user.getCurrent_credit()-totalAmount);
             	
@@ -68,14 +80,14 @@ public class BillServlet extends HttpServlet {
                 invoice.setCart(cart);
                 invoice.setTotalAmount(totalAmount);
                 invoice.setCustomer(user);
-                invoice.setDate(new Date());
+                invoice.setDate(LocalDateTime.now());
                 invoice.setTransaction_id(transaction.getTransaction_id());
 
                 InvoiceService.saveInvoice(invoice);
 
                 try {
                     String subject = "Your Invoice from SuperMarket";
-                    EmailUtility.sendInvoiceEmail(user.getEmail(),subject ,  invoice, providedOffer);
+//                    EmailUtility.sendInvoiceEmail(user.getEmail(),subject ,  invoice, providedOffer);
                     
                 } catch (Exception e) {
                 	LoggerUtil.getInstance().logException("Error in Updating invoice", e);
@@ -86,7 +98,8 @@ public class BillServlet extends HttpServlet {
 
                 response.sendRedirect("confirmation.jsp");
         	}else {
-        		request.getRequestDispatcher("cart.jsp").forward(request, response);
+        		request.setAttribute("errorMessage", "Stock isn't Available, please check with that!");
+        		request.getRequestDispatcher("cashier.jsp").forward(request, response);
         		
         	}
         	
@@ -95,7 +108,7 @@ public class BillServlet extends HttpServlet {
         	
         } else {
         	request.setAttribute("errorMessage", "Customer Doesn't have enough Credit to buy, please buy with in Rs. "+user.getCurrent_credit());
-    		request.getRequestDispatcher("cart.jsp").forward(request, response);
+    		request.getRequestDispatcher("cashier.jsp").forward(request, response);
         }
     }
 

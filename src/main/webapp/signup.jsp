@@ -12,19 +12,19 @@
     
     <form action="signup" method="post" onsubmit="return checkLogin(this);">
      	<label for="userName">User Name:</label>
-        <input type="text" id="userName" name="userName" required><br><br>
+        <input type="text" id="userName" name="userName" value="${userName}" required><br><br>
         
         <label for="phoneNumber">Mobile Number:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" required><br><br>
+        <input type="text" id="phoneNumber" name="phoneNumber"  value="${phoneNumber}" required><br><br>
         
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+        <input type="password" id="password" name="password" value="${password}" required><br><br>
         
         <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" required><br><br>
+        <input type="password" id="confirmPassword" name="confirmPassword" value="${password}"  required><br><br>
         
         <label for="email">Email:</label>
-        <input type="text" id="email" name="email" required><br><br>
+        <input type="text" id="email" name="email" value="${email}"  required><br><br>
         
         <input type="submit" value="Sign Up">
     </form>

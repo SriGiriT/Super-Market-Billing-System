@@ -25,19 +25,18 @@ public class LoginServlet extends HttpServlet {
 
         UserService userService = new UserService();
         User user = userService.login(phoneNumber, password);
+        HttpSession session = request.getSession();
         if (user != null) {
-            HttpSession session = request.getSession();
             session.setAttribute("user", user);
             String token = JWTUtil.generateToken(user.getPhoneNumber(), user.getRole().toString());
             Cookie cookie = new Cookie("auth_token", token);
             cookie.setHttpOnly(true);
-            cookie.setMaxAge(5*60);
+            cookie.setMaxAge(300*60);
             response.addCookie(cookie);
-            LoggerUtil.getInstance().getLogger().debug("Logged in successss");
             response.sendRedirect("home.jsp");
         } else {
             request.setAttribute("errorMessage", "Invalid credentials!");
-            LoggerUtil.getInstance().logWarn("Invalid credentials while loggin in");
+            session.setAttribute("phoneNumber", phoneNumber);
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }

@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.format.DateTimeFormatter;
 
 import com.billingsystem.Model.CartItem;
 import com.billingsystem.Model.Invoice;
@@ -18,7 +19,7 @@ public class InvoiceDao {
             PreparedStatement ps =  DBConnectionUtil.getInstance().getConnection().prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, invoice.getCustomer().getId());
             ps.setDouble(2, invoice.getTotalAmount());
-            ps.setDate(3, new java.sql.Date(invoice.getDate().getTime()));
+            ps.setString(3, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(invoice.getDate()));
             ps.setInt(4, invoice.getTransaction_id());
 
             ps.executeUpdate();

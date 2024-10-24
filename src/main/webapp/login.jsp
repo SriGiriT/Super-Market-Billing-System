@@ -8,11 +8,16 @@
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
+ 	<c:if test="${not empty successMessage}">
+        <h4 id="successMessage" style="display: flex;color: green;transition: opacity 1s ease-in-out;;item-align:center;justify-content: center;">
+            <c:out value="${successMessage}"/>
+        </h4>
+    </c:if>
     <h2>Login to Supermarket Billing System</h2>
     
     <form action="login" method="post" onsubmit="return checkLogin(this);">
         <label for="phoneNumber">Mobile Number:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber" required><br><br>
+        <input type="text" id="phoneNumber" name="phoneNumber" value="${phoneNumber}" required><br><br>
         
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
@@ -36,6 +41,21 @@
     		}
     		return true;
     	}
+    	function hideMessage() {
+    		console.log("working");
+            var messageElement = document.getElementById('successMessage');
+            if (messageElement) {
+                messageElement.style.opacity = '0';
+                setTimeout(function() {
+                    messageElement.style.display = 'none';
+                }, 1000); 
+            }
+        }
+
+        window.onload = function() {
+        	console.log("onload");
+            hideMessage(); 
+        };
     </script>
 </body>
 </html>

@@ -28,9 +28,9 @@ public class ProductServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); 
         response.setHeader("Pragma", "no-cache"); 
         response.setHeader("Expires", "0"); 
+        User user = (User) session.getAttribute("user");
+        String role = user.getRole().toString();
         if(productId == null) {
-        	User user = (User) session.getAttribute("user");
-            String role = user.getRole().toString();
             List<Product> products = productService.getAllProducts();
             String sortColumn = request.getParameter("sortColumn");
             String sortOrder = request.getParameter("sortOrder");
@@ -45,10 +45,13 @@ public class ProductServlet extends HttpServlet {
             request.getRequestDispatcher("products.jsp").forward(request, response);
            
         }else {
-        	Product product = productService.getProductByID(Long.parseLong(productId));
-    		request.setAttribute("product", product);
-    		session.setAttribute("product", product);
-            request.getRequestDispatcher("/update_product.jsp").forward(request, response);
+			if(role.equals("INVENTORY_MANAGER")) {
+				Product product = productService.getProductByID(Long.parseLong(productId));
+				request.setAttribute("product", product);
+				session.setAttribute("product", product);
+			    request.getRequestDispatcher("/update_product.jsp").forward(request, response);
+        	}
+        	
         }
         
     }

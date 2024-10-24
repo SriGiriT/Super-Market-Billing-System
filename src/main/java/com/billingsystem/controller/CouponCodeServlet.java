@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.billingsystem.service.CouponService;
 
@@ -24,6 +25,7 @@ public class CouponCodeServlet extends HttpServlet {
 		CouponService couponService = new CouponService();
 		double overallAmount = Double.parseDouble(request.getParameter("overallAmount"));
 		String coupon = request.getParameter("couponCode");
+		HttpSession session = request.getSession(false);
 		Map<String, List<String>> hashMap = couponService.getCouponCodes();
 		List<String> criteria = hashMap.get(coupon);
 		System.out.println(criteria);
@@ -58,7 +60,10 @@ public class CouponCodeServlet extends HttpServlet {
 			request.setAttribute("providedOffer", 0);
 			request.setAttribute("couponMessage", "Invalid Coupon!");
 		}
-		request.getRequestDispatcher("cart.jsp").forward(request, response);
+		session.setAttribute("cart", session.getAttribute("cart"));
+		System.out.println(session.getAttribute("cart"));
+//		session.setAttribute("", );
+		request.getRequestDispatcher("cashier.jsp").forward(request, response);
 		
 	}
 
