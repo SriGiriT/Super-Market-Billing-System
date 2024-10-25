@@ -110,6 +110,8 @@ public class ReportServlet extends HttpServlet {
 		        }
 	      		break;
 	      	case CUSTOMER:
+	      	case INVENTORY_MANAGER:
+	      	case CASHIER:
 	      		 int userId = Integer.parseInt(request.getParameter("userId"));
 	      		 switch (action) {
 		            case "frequentlyBoughtItem":
@@ -129,6 +131,7 @@ public class ReportServlet extends HttpServlet {
 		                request.getRequestDispatcher("reports.jsp").forward(request, response);;
 		                break;
 		        }
+	      	
 	      }
 	       
 	        response.getWriter().println(""

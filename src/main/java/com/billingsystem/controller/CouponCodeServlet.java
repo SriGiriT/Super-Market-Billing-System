@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.billingsystem.Model.User;
 import com.billingsystem.service.CouponService;
 
 
@@ -26,6 +27,7 @@ public class CouponCodeServlet extends HttpServlet {
 		double overallAmount = Double.parseDouble(request.getParameter("overallAmount"));
 		String coupon = request.getParameter("couponCode");
 		HttpSession session = request.getSession(false);
+		 User user = (User)session.getAttribute("user");
 		Map<String, List<String>> hashMap = couponService.getCouponCodes();
 		List<String> criteria = hashMap.get(coupon);
 		System.out.println(criteria);
@@ -39,11 +41,11 @@ public class CouponCodeServlet extends HttpServlet {
 			Double providedOffer = 0.0;
 			boolean isPersentageOffer = offerAmount.endsWith("%");
 			if(todayDate.isAfter(expiryDate)) {
-				request.setAttribute("providedOffer", 0);
-				request.setAttribute("couponMessage", "Coupon Got Expired!");
+				session.setAttribute("providedOffer", 0);
+				session.setAttribute("couponMessage", "Coupon Got Expired!");
 			}else if(overallAmount < minAmount) {
-				request.setAttribute("providedOffer", 0);
-				request.setAttribute("couponMessage", couponCriteria);
+				session.setAttribute("providedOffer", 0);
+				session.setAttribute("couponMessage", couponCriteria);
 			}else {
 				if(isPersentageOffer) {
 					providedOffer = overallAmount * (Integer.parseInt(offerAmount.substring(0, offerAmount.length()-1))/100.0);
@@ -52,18 +54,23 @@ public class CouponCodeServlet extends HttpServlet {
 					providedOffer = Integer.parseInt(offerAmount)+0.0;
 					overallAmount = overallAmount - providedOffer;
 				}
-				request.setAttribute("providedOffer", providedOffer);
-				request.setAttribute("couponMessage", "Coupon Applied! "+providedOffer+" RS offer...");
+				session.setAttribute("providedOffer", providedOffer);
+				session.setAttribute("couponMessage", "Coupon Applied! "+providedOffer+" RS offer...");
 			}
 			
 		}else {
-			request.setAttribute("providedOffer", 0);
-			request.setAttribute("couponMessage", "Invalid Coupon!");
+			session.setAttribute("providedOffer", 0);
+			session.setAttribute("couponMessage", "Invalid Coupon!");
 		}
 		session.setAttribute("cart", session.getAttribute("cart"));
 		System.out.println(session.getAttribute("cart"));
 //		session.setAttribute("", );
-		request.getRequestDispatcher("cashier.jsp").forward(request, response);
+		session.setAttribute("appliedCouponCode", coupon);
+		if(user.getRole().toString().equals("CASHIER")) {
+        	response.sendRedirect("cashier.jsp");
+        }else {
+        	response.sendRedirect("products");
+        }
 		
 	}
 

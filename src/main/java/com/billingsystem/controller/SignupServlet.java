@@ -66,16 +66,20 @@ public class SignupServlet extends HttpServlet {
         user.setPassword(hashedPassword); 
         user.setRole(User.Role.CUSTOMER);
         user.setEmail(email);
-
-        boolean isRegistered = userService.createUser(user);
-
-        if (isRegistered) {
-        	session.setAttribute("successMessage", "Signed up Successfully!!!");
-            response.sendRedirect("login.jsp"); 
-        } else {
-            request.setAttribute("errorMessage", "Signup failed due to internal error.");
-            request.getRequestDispatcher("signup.jsp").forward(request, response);
+        if(userService.isEmailExist(email)) {
+        	request.setAttribute("errorMessage", "Provided Email already linked with existing account\nPlease try with different Email");
+        }else {
+        	 boolean isRegistered = userService.createUser(user);
+             if (isRegistered) {
+             	session.setAttribute("successMessage", "Signed up Successfully!!!");
+                 response.sendRedirect("login.jsp"); 
+                 return;
+             } else {
+                 request.setAttribute("errorMessage", "Signup failed due to internal error.");
+             }
         }
+        request.getRequestDispatcher("signup.jsp").forward(request, response);
+       
     }
 	
 	

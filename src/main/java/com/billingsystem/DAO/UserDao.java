@@ -26,7 +26,7 @@ public class UserDao {
                 user.setRole(Role.valueOf(rs.getString("role")));
                 user.setPhoneNumber(rs.getString("phone_number"));
                 user.setEmail(rs.getString("email"));
-                user.setPoints(rs.getInt("points"));
+                user.setPoints(rs.getDouble("points"));
                 user.setCurrent_credit(rs.getDouble("current_credit"));
                 return user;
             }
@@ -139,6 +139,44 @@ public class UserDao {
     		e.printStackTrace();
     		return userAndRole;
 		}
+	}
+
+
+
+	public boolean isEmailExist(String email) {
+		String sql = "SELECT * FROM user WHERE email = ?";
+        try {
+        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+               return true;
+            }else {
+            	return false;
+            }
+        } catch (SQLException e) {
+        	LoggerUtil.getInstance().logException("error in findUserByEmail", e);
+            e.printStackTrace();
+            return true;
+        }
+		
+	}
+
+
+
+	public boolean makeTransaction(User user, double totalAmount) {
+		String sql = "UPDATE user SET current_credit = ?, points = ? WHERE phone_number = ?";
+    	try {
+    		PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+    		ps.setDouble(1, user.getCurrent_credit());
+    		ps.setDouble(2, user.getPoints());
+    		ps.setString(3, user.getPhoneNumber());
+    		ps.executeUpdate();
+    		return true;
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
 	}
 
 

@@ -1,9 +1,8 @@
 package com.billingsystem.controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.Arrays;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -74,7 +73,8 @@ public class BillServlet extends HttpServlet {
             	transaction.setAmount(totalAmount);
             	transaction.setTransaction_date(LocalDateTime.now());
             	transactionService.saveTransactions(transaction);
-            	userService.assignCurrentCredit(user.getPhoneNumber(), user.getCurrent_credit()-totalAmount);
+            	userService.makeTransaction(user, totalAmount);
+            	
             	
         		Invoice invoice = new Invoice();
                 invoice.setCart(cart);
@@ -84,10 +84,10 @@ public class BillServlet extends HttpServlet {
                 invoice.setTransaction_id(transaction.getTransaction_id());
 
                 InvoiceService.saveInvoice(invoice);
-
+                String[] emailConfirmation = null;
                 try {
                     String subject = "Your Invoice from SuperMarket";
-//                    EmailUtility.sendInvoiceEmail(user.getEmail(),subject ,  invoice, providedOffer);
+                    emailConfirmation = EmailUtility.sendInvoiceEmail(user.getEmail(),subject ,  invoice, providedOffer);
                     
                 } catch (Exception e) {
                 	LoggerUtil.getInstance().logException("Error in Updating invoice", e);
@@ -95,7 +95,18 @@ public class BillServlet extends HttpServlet {
                 }
 
                 session.removeAttribute("cart");
-
+                session.removeAttribute("providedOffer");
+                session.removeAttribute("couponMessage");
+                session.removeAttribute("customerExist");
+                session.removeAttribute("errorMessage");
+                session.removeAttribute("userNotExist");
+                session.removeAttribute("errorInCreateUser");
+                session.removeAttribute("customerExist");
+                session.removeAttribute("appliedCouponCode");
+                if(emailConfirmation != null) {
+                	session.setAttribute("pdfPath", emailConfirmation[1]);
+                	session.setAttribute("invoiceBody", emailConfirmation[0]);
+                }
                 response.sendRedirect("confirmation.jsp");
         	}else {
         		request.setAttribute("errorMessage", "Stock isn't Available, please check with that!");

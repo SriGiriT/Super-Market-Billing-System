@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.billingsystem.Model.User;
 import com.billingsystem.service.UserService;
 import com.billingsystem.utility.JWTUtil;
-import com.billingsystem.utility.LoggerUtil;
+import com.billingsystem.utility.PasswordUtil;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String phoneNumber = request.getParameter("phoneNumber");
         String password = request.getParameter("password");
-
+        
         UserService userService = new UserService();
         User user = userService.login(phoneNumber, password);
         HttpSession session = request.getSession();
@@ -33,6 +33,11 @@ public class LoginServlet extends HttpServlet {
             cookie.setHttpOnly(true);
             cookie.setMaxAge(300*60);
             response.addCookie(cookie);
+            if(PasswordUtil.checkPassword(phoneNumber, PasswordUtil.hashPassword(password))) {
+            	request.setAttribute("NeedToChange", "You have to change your password if you are login for first time!");
+            	request.getRequestDispatcher("change_password.jsp").forward(request, response);
+            	return;
+            }
             response.sendRedirect("home.jsp");
         } else {
             request.setAttribute("errorMessage", "Invalid credentials!");

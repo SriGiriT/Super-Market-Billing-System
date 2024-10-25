@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div  class="logsignform">
     <h2>Sign Up for Supermarket Billing System</h2>
     
     <form action="signup" method="post" onsubmit="return checkLogin(this);">
@@ -35,6 +36,7 @@
 
     <br>
     <p>Already have an account? <a href="login.jsp">Login here</a></p>
+    </div>
     <script type="text/javascript">
     	function checkLogin(form){
     		if(form.userName.value == ""){

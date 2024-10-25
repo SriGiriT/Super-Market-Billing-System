@@ -30,11 +30,19 @@ public class CreateUserServlet extends HttpServlet {
 		user.setPassword(PasswordUtil.hashPassword(customerPhoneNumber));
 		user.setEmail(customerEmail);
 		user.setUserName(customerUserName);
-		userService.createUser(user);
-		session.setAttribute("customerPhoneNumber", user.getPhoneNumber());
-		session.removeAttribute("userNotExist");
-		session.setAttribute("customerExist", "Customer Created You can Proceed with Billing!");
+		if(userService.isEmailExist(customerEmail)) {
+			session.setAttribute("customerName", customerUserName);
+        	session.setAttribute("errorInCreateUser", "Provided Email already linked with existing account\nPlease try with different Email");
+        }else {
+        	userService.createUser(user);
+        	session.setAttribute("customerPhoneNumber", user.getPhoneNumber());
+        	session.removeAttribute("errorInCreateUser");
+    		session.removeAttribute("userNotExist");
+    		session.setAttribute("customerExist", "Customer Created You can Proceed with Billing!");
+    		
+        }
 		request.getRequestDispatcher("cashier.jsp").forward(request, response);
+		
 	}
 
 }

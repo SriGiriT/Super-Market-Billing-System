@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,17 +28,18 @@
 	<p>Information:<br/> Name: ${user.userName} <br/> Phone Number: ${user.phoneNumber} <br/>  Email: ${user.email} <br/>  Points: ${user.points} <br/>  Credits: ${user.current_credit} <br/> </p>
 	
 	<c:if test="${user.role == 'ADMIN'}">
-        <p><a href="loadUsersAndRoles">Assign Role</a></p>
-        <p><a href="loadUsersAndCredit">Add Credit</a></p>
+        <p><a href="loadUsersAndRoles"  target="_blank">Assign Role</a></p>
+        <p><a href="loadUsersAndCredit"  target="_blank">Add Credit</a></p>
     </c:if>
     <c:if test="${user.role == 'CASHIER'}">
-        <p><a href="cashier.jsp">Bill Items</a></p>
+        <p><a href="cashier.jsp"  target="_blank">Bill Items</a></p>
     </c:if>
     <c:if test="${user.role == 'ADMIN' || user.role == 'CUSTOMER'}">
-    	<p><a href="reports.jsp">View Reports</a></p>
+    	<p><a href="reports.jsp"  target="_blank">View Reports</a></p>
     </c:if>
-    <p><a href="products">View Products</a></p>
-    <p><a href="change_password.jsp">Change Password</a></p>
+    	<p><a href="products">View Products</a></p>
+
+    <p><a href="change_password.jsp" target="_blank">Change Password</a></p>
     <form id='logoutForm' action="logout" method="post">
     	<p><a href="javascript:;" onclick="document.getElementById('logoutForm').submit();">Logout</a></p>
     </form>

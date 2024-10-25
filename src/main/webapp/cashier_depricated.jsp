@@ -33,7 +33,7 @@
                 <c:forEach var="product" items="${searchResults}">
                     <tr>
                         <td>${product.name}</td>
-                        <td><fmt:formatNumber value="${product.price}" type="currency" /></td>
+                        <td>&#8377; <fmt:formatNumber value="${product.price}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></td>
                         <td>${product.stockLeft}</td>
                         <td>
                             <input type="hidden" name="productIds" value="${product.id}" />
@@ -64,7 +64,7 @@
                     <tr>
                         <td>${item.product.name}</td>
                         <td>${item.quantity}</td>
-                        <td><fmt:formatNumber value="${item.product.price * item.quantity}" type="currency" /></td>
+                        <td>&#8377; <fmt:formatNumber value="${item.product.price * item.quantity}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></td>
                         <td>
                             <input type="hidden" name="productIds" value="${item.product.id}" />
                             <input type="number" name="quantities" value="${item.quantity}" min="1" max="${item.product.stockLeft}" />
@@ -78,16 +78,16 @@
     </form><br>
     
             <c:if test="${not empty providedOffer}">
-                <div>Before Applying: <fmt:formatNumber value="${overallAmount}" type="currency" /></div>
-                <div>Offer Applied: <fmt:formatNumber value="${providedOffer}" type="currency" /></div>
+                <div>Before Applying: &#8377; <fmt:formatNumber value="${overallAmount}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></div>
+                <div>Offer Applied: &#8377; <fmt:formatNumber value="${providedOffer}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></div>
                 <c:set var="overallAmount" value="${overallAmount - providedOffer}" />
             </c:if>
             <form action="CouponCode" method="get">
-            <div>Total Amount: <fmt:formatNumber value="${overallAmount}" type="currency" /></div>
+            <div>Total Amount: &#8377;  <fmt:formatNumber value="${overallAmount}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></div>
             
             <label for="couponCode">Coupon Code:</label>
             <input type="hidden" name="overallAmount" value="${overallAmount}" />
-            <input type="text" id="couponCode" name="couponCode" />
+            <input type="text" id="couponCode" name="couponCode"  value="${appliedCouponCode}" />
             <button type="submit">Apply Coupon</button>
         </form>
 
@@ -99,13 +99,13 @@
         </c:if>
 		<c:if test="${user.role == 'CASHIER'}">
 			<form action="loadUser" method="post">
-				<input type="text" name="customerPhoneNumber" value="${customerPhoneNumber }"/>
+				<input type="text" name="customerPhoneNumber" value="${customerPhoneNumber }" required pattern="\d{10}" title="Please enter a 10-digit phone number."/>
 				<button type="submit">Load User</button>
 			</form>
 				<c:if test="${not empty userNotExist }">
 					<div class="error">
 					<div>${userNotExist}</div><br/>
-					<form action="createUser" method="post">
+					<form action="createUser" method="post"  onsubmit="return checkLogin(this);">
 						<label for="customerPhoneNumber">Customer Phone Number: </label>
 						<input type="text" name="customerPhoneNumber" value="${customerPhoneNumber}"/><br/>
 						<label for="customerUserName">Customer Name: </label>
@@ -114,22 +114,48 @@
 						<input type="text" name="customerEmail"/><br/>
 						<input type="submit" value="Create User"/>
 					 </form>
+					 <c:if test="${not empty errorInCreateUser}">
+					 	<div>${errorInCreateUser}</div>
+					 </c:if>
 					</div>
 				</c:if>
-				
+				<c:if test="${not empty customerExist}">
+					<div >${customerExist}</div><br/>
+				</c:if>
 		</c:if>
-		<c:if test="${not empty customerExist}">
-			<div >${customerExist}</div><br/>
-		</c:if>
+		
         <form action="BillServlet" method="post">
             <input type="hidden" name="overallAmount" value="${overallAmount}" />
             <input type="hidden" name="providedOffer" value="${providedOffer}" />
             <c:if test="${user.role == 'CASHIER' }">
             	<input type="hidden" name="customerPhoneNumber" value="${customerPhoneNumber }">
             </c:if>
-            <button type="submit">Proceed to Bill</button>
+            <c:if test="${user.role=='CUSTOMER' || not empty customerExist}">
+            	<br/><button type="submit">Proceed to Bill</button>
+            </c:if>
         </form>
     </c:if>
-
+	<script type="text/javascript">
+	function checkLogin(form){
+		if(form.customerUserName.value == ""){
+			alert("Username can't be empty!");
+			form.customerUserName.focus();
+			return false;
+		}
+		exp = /[0-9]{10}/;
+		if(!exp.test(form.customerPhoneNumber.value)){
+			alert("Invalid phone number!");
+			form.customerPhoneNumber.focus();
+			return false;
+		}
+		exp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!exp.test(form.customerEmail.value)) {
+            alert("Please enter a valid email address.");
+            form.customerEmail.focus();
+            return false;
+        }
+		return true;
+	}
+	</script>
 </body>
 </html>

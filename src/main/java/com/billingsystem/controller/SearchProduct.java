@@ -17,7 +17,9 @@ import com.billingsystem.service.ProductService;
 public class SearchProduct extends HttpServlet {
 
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String searchType = request.getParameter("searchType"); 
@@ -42,7 +44,7 @@ public class SearchProduct extends HttpServlet {
         }
 
         request.setAttribute("searchResults", searchResults);
-        request.getRequestDispatcher("/cashier.jsp").forward(request, response);
+        request.getRequestDispatcher("products.jsp").forward(request, response);
     }
 }
 

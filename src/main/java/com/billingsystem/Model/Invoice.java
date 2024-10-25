@@ -1,6 +1,5 @@
 package com.billingsystem.Model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Invoice {

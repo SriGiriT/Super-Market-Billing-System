@@ -2,6 +2,7 @@ package com.billingsystem.utility;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -31,7 +32,7 @@ public class EmailUtility {
     private static String username = "srigiriboopathy@gmail.com"; 
     private static String password = "glszjzjeugnxpmfd"; 
 	
-public static void sendInvoiceEmail(String recipientEmail, String subject, Invoice invoice, Double providedOffer) throws Exception {
+public static String[] sendInvoiceEmail(String recipientEmail, String subject, Invoice invoice, Double providedOffer) throws Exception {
 		
 
         Properties properties = new Properties();
@@ -42,7 +43,7 @@ public static void sendInvoiceEmail(String recipientEmail, String subject, Invoi
         properties.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
 		
         String pdfPath = generateInvoicePDF(invoice, providedOffer);
-
+        String invoiceBody = "";
         Session session = Session.getInstance(properties, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -56,7 +57,8 @@ public static void sendInvoiceEmail(String recipientEmail, String subject, Invoi
             message.setSubject("Invoice for your Purchase");
 
             BodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText(generateInvoiceEmailBody(invoice, providedOffer));
+            invoiceBody = generateInvoiceEmailBody(invoice, providedOffer);
+            messageBodyPart.setText(invoiceBody);
 
             Multipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
@@ -67,12 +69,13 @@ public static void sendInvoiceEmail(String recipientEmail, String subject, Invoi
 
             message.setContent(multipart);
 
-            Transport.send(message);
+//            Transport.send(message);
 
             System.out.println("Email sent successfully with PDF attached.");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
+        return new String[] {invoiceBody, pdfPath};
     }
     
 	 private static String generateInvoiceEmailBody(Invoice invoice, double providedOffer) {
@@ -90,13 +93,13 @@ public static void sendInvoiceEmail(String recipientEmail, String subject, Invoi
 	        }
 	        sb.append("--------------------------------------------------\n");
 	        if(providedOffer>0.0) {
-	        	sb.append("Total Amount: Rs").append(invoice.getTotalAmount()+providedOffer).append("\n");
-	        	sb.append("Offer Applied: Rs").append(providedOffer).append("\n");
-	        	sb.append("Paid Amount: Rs").append(invoice.getTotalAmount()).append("\n\n");
+	        	sb.append("Total Amount: Rs. ").append(invoice.getTotalAmount()+providedOffer).append("\n");
+	        	sb.append("Offer Applied: Rs. ").append(providedOffer).append("\n");
+	        	sb.append("Paid Amount: Rs. ").append(invoice.getTotalAmount()).append("\n\n");
 	        }else {
-	        	sb.append("Total Amount: Rs").append(invoice.getTotalAmount()).append("\n\n");
+	        	sb.append("Total Amount: Rs. ").append(invoice.getTotalAmount()).append("\n\n");
 	        }
-	        sb.append("Date: ").append(invoice.getDate().toString()).append("\n");
+	        sb.append("Date: ").append( DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(invoice.getDate()).toString()).append("\n");
 	        sb.append("Thank you for shopping with us!\n");
 	        return sb.toString();
 	    }
@@ -105,13 +108,13 @@ public static void sendInvoiceEmail(String recipientEmail, String subject, Invoi
 	
 	 private static String generateInvoicePDF(Invoice invoice, double providedOffer) throws DocumentException, FileNotFoundException {
 	        Document document = new Document();
-	        String pdfPath = "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0\\temp\\Invoice_" + invoice.getId() + ".pdf";
+	        String pdfPath = "C:\\Users\\srigiri-20969\\prog\\git_clone\\Super-Market-Billing-System\\src\\main\\webapp\\Invoice.pdf";
 	        PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
 	        document.open();
 	        document.add(new Paragraph("Invoice ID: " + invoice.getId()));
 	        document.add(new Paragraph("Customer: " + invoice.getCustomer().getUserName()));
-	        document.add(new Paragraph("Date: " + invoice.getDate()));
+	        document.add(new Paragraph("Date: " + DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(invoice.getDate()).toString()));
 	        document.add(new Paragraph("Items: "));
 	        
 	        for (CartItem item : invoice.getCart().getItems()) {
@@ -119,11 +122,11 @@ public static void sendInvoiceEmail(String recipientEmail, String subject, Invoi
 	        }
 	        
 	        if(providedOffer>0.0) {
-	        	document.add(new Paragraph("Total Amount: Rs" + (invoice.getTotalAmount()+providedOffer)));
-	        	document.add(new Paragraph("Offer Applied: Rs"+providedOffer));
-	        	document.add(new Paragraph("Paid Amount: Rs"+invoice.getTotalAmount()));
+	        	document.add(new Paragraph("Total Amount: Rs. " + (invoice.getTotalAmount()+providedOffer)));
+	        	document.add(new Paragraph("Offer Applied: Rs. "+providedOffer));
+	        	document.add(new Paragraph("Paid Amount: Rs. "+invoice.getTotalAmount()));
 	        }else {
-	        	document.add(new Paragraph("Total Amount: Rs" + invoice.getTotalAmount()));
+	        	document.add(new Paragraph("Total Amount: Rs. " + invoice.getTotalAmount()));
 	        }
 	        document.close();
 

@@ -24,4 +24,11 @@ public class ProductService {
     public void updateProductStock(Product product) {
     	productDao.updateProductStock(product);
     }
+
+	public List<Product> getProductsPaginated(int startIndex, int pageSize) {
+		return productDao.getProductsPaginated(startIndex, pageSize);
+	}
+	public int getTotalProductCount() {
+		return productDao.getTotalProductCount();
+	}
 }

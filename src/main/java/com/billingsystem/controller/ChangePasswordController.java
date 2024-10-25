@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.service.UserService;
-import com.billingsystem.utility.LoggerUtil;
 import com.billingsystem.utility.PasswordUtil;
 
 @WebServlet("/changePassword")

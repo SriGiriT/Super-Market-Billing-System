@@ -18,7 +18,7 @@ public class CartServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
         Cart cart = (Cart) session.getAttribute("cart");
         System.out.println(cart);
         if (cart == null) {
@@ -30,7 +30,7 @@ public class CartServlet extends HttpServlet {
         String[] quantities = request.getParameterValues("quantities");
 
         ProductService productService = new ProductService();
-
+      
         for (int i = 0; i < productIds.length; i++) {
             int productId = Integer.parseInt(productIds[i]);
             int quantity = Integer.parseInt(quantities[i]);
@@ -40,6 +40,8 @@ public class CartServlet extends HttpServlet {
                 cart.addItem(product, quantity);
             }
         }
-        response.sendRedirect("cashier.jsp");
+
+        response.sendRedirect("products");
+        
     }
 }

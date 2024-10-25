@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.billingsystem.Model.Product;
 import com.billingsystem.utility.DBConnectionUtil;
+import com.billingsystem.utility.LoggerUtil;
 
 public class ProductDao {
         
@@ -21,6 +22,7 @@ public class ProductDao {
                 product.setName(rs.getString("name"));
                 product.setPrice(rs.getDouble("price"));
                 product.setStockLeft(rs.getInt("stock_left"));
+                product.setBuyerPrice(rs.getDouble("seller_price"));
                 product.setUsualStock(rs.getInt("usual_stock"));
                 product.setTotalSold(rs.getInt("total_sold_out"));
                 product.setDescription(rs.getString("description"));
@@ -83,4 +85,49 @@ public class ProductDao {
 	            e.printStackTrace();
 	        }
 	  }
+
+
+	public List<Product> getProductsPaginated(int startIndex, int pageSize) {
+		List<Product> products = new ArrayList<>();
+        try{
+        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("WITH PaginatedProducts AS ( "
+        			+ "    SELECT *, ROW_NUMBER() OVER (ORDER BY id) AS row_num "
+        			+ "    FROM Products "
+        			+ ") "
+        			+ "SELECT *  "
+        			+ "FROM PaginatedProducts "
+        			+ "WHERE row_num BETWEEN ? AND ?;");
+        	ps.setInt(1, startIndex+1);
+        	ps.setInt(2, startIndex+ pageSize);
+        	ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getLong("id"));
+                product.setName(rs.getString("name"));
+                product.setPrice(rs.getDouble("price"));
+                product.setStockLeft(rs.getInt("stock_left"));
+                product.setBuyerPrice(rs.getDouble("seller_price"));
+                product.setUsualStock(rs.getInt("usual_stock"));
+                product.setTotalSold(rs.getInt("total_sold_out"));
+                product.setDescription(rs.getString("description"));
+                products.add(product);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return products;
+	}
+	
+	public int getTotalProductCount() {
+        try{
+        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement("SELECT COUNT(*) AS total_products FROM products;");
+        	ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("total_products");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+	}
 }

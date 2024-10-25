@@ -7,6 +7,9 @@
 </head>
 <body>
 <h2>Change Password</h2>
+<c:if test="${not empty NeedToChange}">
+	<div>${NeedToChange}</div>
+</c:if>
 <form action="changePassword" method="post"  onsubmit="return checkLogin(this);">
     <label for="existingPassword">Existing Password:</label>
     <input type="password" name="existingPassword" required/><br/>
@@ -26,6 +29,7 @@
             <c:out value="${successMessage}"/>
         </h4>
     </c:if>
+    <br/><p><a href="home.jsp">Go Home</a></p>
     <script type="text/javascript">
     	function checkLogin(form){
     		if(form.existingPassword.value==""){

@@ -10,13 +10,14 @@ public class User {
     private Role role;
     private String email;
     private double current_credit;
+    private double points;
+
 
     public enum Role {
         ADMIN, CASHIER, INVENTORY_MANAGER, CUSTOMER
     }
 
-	private int points;
-
+	
 	public Long getId() {
 		return id;
 	}
@@ -74,11 +75,11 @@ public class User {
 		this.userName = userName;
 	}
 
-	public int getPoints() {
+	public double getPoints() {
 		return points;
 	}
 
-	public void setPoints(int points) {
+	public void setPoints(double points) {
 		this.points = points;
 	}
 	

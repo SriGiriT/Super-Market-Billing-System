@@ -31,14 +31,31 @@ public class ProductServlet extends HttpServlet {
         User user = (User) session.getAttribute("user");
         String role = user.getRole().toString();
         if(productId == null) {
-            List<Product> products = productService.getAllProducts();
+        	int pageSize = 15; 
+        	int currentPage = 1;  
+
+        	String pageParam = request.getParameter("page");
+        	if (pageParam != null && !pageParam.isEmpty()) {
+        	    currentPage = Integer.parseInt(pageParam);
+        	}
+
+        	int startIndex = (currentPage - 1) * pageSize;
+
+        	List<Product> paginatedProducts = productService.getProductsPaginated(startIndex, pageSize);
+
+        	int totalProducts = productService.getTotalProductCount();
+        	int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+
+        	request.setAttribute("products", paginatedProducts);
+        	request.setAttribute("currentPage", currentPage);
+        	request.setAttribute("totalPages", totalPages);
             String sortColumn = request.getParameter("sortColumn");
             String sortOrder = request.getParameter("sortOrder");
             if (sortColumn != null && sortOrder != null) {
                 Comparator<Product> comparator = getComparator(sortColumn, sortOrder);
-                products.sort(comparator);
+                paginatedProducts.sort(comparator);
             }
-            request.setAttribute("products", products);
+            request.setAttribute("products", paginatedProducts);
             request.setAttribute("sortColumn", sortColumn);
             request.setAttribute("sortOrder", sortOrder);
             request.setAttribute("role", role);
