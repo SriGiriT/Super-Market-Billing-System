@@ -29,7 +29,7 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         UserService userService = new UserService();
         Cookie[] cookies = httpRequest.getCookies();
-        if(httpRequest.getRequestURI().contains("signup")) {
+        if(httpRequest.getRequestURI().contains("signup") || httpRequest.getRequestURI().startsWith("/login") || httpRequest.getRequestURI().startsWith("style") || httpRequest.getRequestURI().contains("change_password")) {
         	chain.doFilter(request, response);
         	return;
         }
@@ -42,7 +42,6 @@ public class AuthenticationFilter implements Filter {
                 }
             }
         }
-
         if (token != null) {
             DecodedJWT decodedJWT = JWTUtil.validateToken(token);
             if (decodedJWT != null) {

@@ -18,7 +18,7 @@ public class LoadUserServlet extends HttpServlet {
        
 	
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String customerPhoneNumber = request.getParameter("customerPhoneNumber");
 		HttpSession session = request.getSession(false);
 		UserService userService = new UserService();
@@ -33,7 +33,7 @@ public class LoadUserServlet extends HttpServlet {
 			session.removeAttribute("customerExist");
 			
 		}
-		request.getRequestDispatcher("cashier.jsp").forward(request, response);
+		request.getRequestDispatcher("products").forward(request, response);
 	}
 
 }

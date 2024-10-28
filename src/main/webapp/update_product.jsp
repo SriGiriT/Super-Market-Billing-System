@@ -1,14 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Update Product</title>
+ <link rel="stylesheet" href="style_home.css"> 
 </head>
 <body>
+<div class="content-container" style="width:600px;">
 	 <h3>Product Details</h3>
-    <form action="updateProduct" method="POST">
+    <form action="updateProduct" >
         <input type="hidden" name="productId" value="${product.id}" />
         
         <label for="name">Name:</label>
@@ -16,7 +19,7 @@
         <br>
         
         <label for="description">Description:</label>
-        <textarea id="description" name="description" required>${product.description}</textarea>
+        <input type="text" id="description" name="description" required value="${product.description}"/>
         <br>
         
         <label for="sellingPrice">Selling Price:</label>
@@ -33,5 +36,6 @@
 
         <button type="submit">Update Product</button>
     </form>
+    </div>
 </body>
 </html>

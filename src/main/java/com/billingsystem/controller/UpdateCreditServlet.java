@@ -21,7 +21,8 @@ public class UpdateCreditServlet extends HttpServlet {
         User adminUser = (User) session.getAttribute("user");
         System.out.println(adminUser);
         if (adminUser != null && "ADMIN".equals(adminUser.getRole().toString())) {
-            String mobileNumber = request.getParameter("mobileNumber");
+            String mobileNumberAndName = request.getParameter("mobileNumber");
+            String mobileNumber = mobileNumberAndName.split("-")[0]; 
             Double credit = Double.parseDouble(request.getParameter("credit"));
             
             UserService userService = new UserService();

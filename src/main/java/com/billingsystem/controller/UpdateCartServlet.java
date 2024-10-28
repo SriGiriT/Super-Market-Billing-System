@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.Cart;
-import com.billingsystem.Model.User;
 @WebServlet("/UpdateCartServlet")
 public class UpdateCartServlet extends HttpServlet {
 
@@ -22,7 +21,6 @@ public class UpdateCartServlet extends HttpServlet {
 
         HttpSession session = request.getSession(false);
         Cart cart = (Cart) session.getAttribute("cart");
-        User user = (User) session.getAttribute("user");
         if (cart != null) {
             for (int i = 0; i < productIds.length; i++) {
                 int productId = Integer.parseInt(productIds[i]);
@@ -33,6 +31,6 @@ public class UpdateCartServlet extends HttpServlet {
         }
 
         session.setAttribute("cart", cart);
-        	response.sendRedirect("products");        
+        response.sendRedirect("products");        
     }
 }

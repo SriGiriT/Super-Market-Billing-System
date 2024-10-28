@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="header.jsp" %>
 <html>
 <head>
     <title>Update Credit</title>
@@ -21,8 +22,10 @@
             creditInputField.value = existingCredit.toFixed(2);
         }
     </script>
+    <link rel="stylesheet" href="style_home.css"> 
 </head>
 <body>
+<div class="content-container" style="max-width:600px;">
     <h2>Update Credit</h2>
     <form action="updateCredit" method="post">
         Mobile Number:
@@ -37,12 +40,13 @@
         <input type="text" id="existingCredit" name="existingCredit" readonly/><br/>
 
         Update Credit:
-        <input type="number" id="creditInput" name="credit" step="10.00" min="0" max="10000" required/><br/>
+        <input type="number" id="creditInput" name="credit" min="0" max="10000" required/><br/>
 
         <input type="submit" value="Update Credit"/>
     </form>
     <c:if test="${not empty message}">
         <p style="color:green">${message}</p>
     </c:if>
+    </div>
 </body>
 </html>

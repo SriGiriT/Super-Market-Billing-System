@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.User;
+import com.billingsystem.service.TransactionsService;
 import com.billingsystem.service.UserService;
 import com.billingsystem.utility.JWTUtil;
 import com.billingsystem.utility.PasswordUtil;
@@ -25,9 +26,13 @@ public class LoginServlet extends HttpServlet {
         
         UserService userService = new UserService();
         User user = userService.login(phoneNumber, password);
+        TransactionsService transactionService = new TransactionsService();
         HttpSession session = request.getSession();
         if (user != null) {
             session.setAttribute("user", user);
+            if(user.getRole().toString().equals("ADMIN")) {
+            	session.setAttribute("totalEarnings", transactionService.getTotalTransaction());
+            }
             String token = JWTUtil.generateToken(user.getPhoneNumber(), user.getRole().toString());
             Cookie cookie = new Cookie("auth_token", token);
             cookie.setHttpOnly(true);

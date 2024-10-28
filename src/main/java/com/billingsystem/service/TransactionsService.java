@@ -8,4 +8,7 @@ public class TransactionsService {
 	public void saveTransactions(Transactions transaction) {
 		transactionsDao.saveTransactions(transaction);
 	}
+	public double getTotalTransaction() {
+		return transactionsDao.getTotalTransaction();
+	}
 }

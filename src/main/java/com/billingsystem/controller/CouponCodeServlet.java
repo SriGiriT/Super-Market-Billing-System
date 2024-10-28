@@ -63,14 +63,8 @@ public class CouponCodeServlet extends HttpServlet {
 			session.setAttribute("couponMessage", "Invalid Coupon!");
 		}
 		session.setAttribute("cart", session.getAttribute("cart"));
-		System.out.println(session.getAttribute("cart"));
-//		session.setAttribute("", );
 		session.setAttribute("appliedCouponCode", coupon);
-		if(user.getRole().toString().equals("CASHIER")) {
-        	response.sendRedirect("cashier.jsp");
-        }else {
-        	response.sendRedirect("products");
-        }
+        response.sendRedirect("products");
 		
 	}
 

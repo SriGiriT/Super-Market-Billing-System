@@ -1,6 +1,7 @@
 package com.billingsystem.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.billingsystem.Model.Product;
 import com.billingsystem.Model.User;
 import com.billingsystem.service.ProductService;
+import com.billingsystem.utility.LoggerUtil;
 
 
 @WebServlet("/products")
@@ -29,42 +31,58 @@ public class ProductServlet extends HttpServlet {
         response.setHeader("Pragma", "no-cache"); 
         response.setHeader("Expires", "0"); 
         User user = (User) session.getAttribute("user");
+        String searchType = request.getParameter("searchType"); 
+        String searchQuery = request.getParameter("searchQuery");
         String role = user.getRole().toString();
+        List<Product> productList = new ArrayList<>();
         if(productId == null) {
-        	int pageSize = 15; 
-        	int currentPage = 1;  
-
-        	String pageParam = request.getParameter("page");
-        	if (pageParam != null && !pageParam.isEmpty()) {
-        	    currentPage = Integer.parseInt(pageParam);
+        	if(searchType != null && searchQuery != null) {
+        		if("id".equals(searchType)) {
+        			productList.add(productService.getProductByID(Integer.parseInt(searchQuery)));
+        		}else if("name".equals(searchType)) {
+        			productList = productService.getProductsByName(searchQuery);
+        		}
+        	}else {
+        		
+	        	int pageSize = 10; 
+	        	int currentPage = 1;  
+	
+	        	String pageParam = request.getParameter("page");
+	        	if (pageParam != null && !pageParam.isEmpty()) {
+	        	    currentPage = Integer.parseInt(pageParam);
+	        	}
+	
+	        	int startIndex = (currentPage - 1) * pageSize;
+	
+	        	productList = productService.getProductsPaginated(startIndex, pageSize);
+	
+	        	int totalProducts = productService.getTotalProductCount();
+	        	int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+	
+	        	request.setAttribute("currentPage", currentPage);
+	        	request.setAttribute("totalPages", totalPages);
+	            
         	}
-
-        	int startIndex = (currentPage - 1) * pageSize;
-
-        	List<Product> paginatedProducts = productService.getProductsPaginated(startIndex, pageSize);
-
-        	int totalProducts = productService.getTotalProductCount();
-        	int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
-
-        	request.setAttribute("products", paginatedProducts);
-        	request.setAttribute("currentPage", currentPage);
-        	request.setAttribute("totalPages", totalPages);
-            String sortColumn = request.getParameter("sortColumn");
+        	String sortColumn = request.getParameter("sortColumn");
             String sortOrder = request.getParameter("sortOrder");
             if (sortColumn != null && sortOrder != null) {
                 Comparator<Product> comparator = getComparator(sortColumn, sortOrder);
-                paginatedProducts.sort(comparator);
+                productList.sort(comparator);
             }
-            request.setAttribute("products", paginatedProducts);
+            
+            if(searchType != null && searchQuery != null) {
+            	LoggerUtil.getInstance().getLogger().debug(productList.toString());
+            	 request.setAttribute("searchResults", productList);
+            }else {
+            	 request.setAttribute("products", productList);
+            }
             request.setAttribute("sortColumn", sortColumn);
             request.setAttribute("sortOrder", sortOrder);
             request.setAttribute("role", role);
             request.getRequestDispatcher("products.jsp").forward(request, response);
-           
         }else {
-			if(role.equals("INVENTORY_MANAGER")) {
+			if(role.equals("INVENTORY_MANAGER") || role.equals("ADMIN")) {
 				Product product = productService.getProductByID(Long.parseLong(productId));
-				request.setAttribute("product", product);
 				session.setAttribute("product", product);
 			    request.getRequestDispatcher("/update_product.jsp").forward(request, response);
         	}
@@ -76,6 +94,9 @@ public class ProductServlet extends HttpServlet {
         Comparator<Product> comparator;
 
         switch (sortColumn) {
+        	case "id":
+        		comparator = Comparator.comparing(Product::getId); 
+        		break;
             case "name":
                 comparator = Comparator.comparing(Product::getName);
                 break;

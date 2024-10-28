@@ -20,10 +20,10 @@ public class UpdateProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private ProductService productService = new ProductService();
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(false);
 		User user = (User)session.getAttribute("user");
-		if(user.getRole().toString() == "INVENTORY_MANAGER") {
+		if(user.getRole().toString() == "INVENTORY_MANAGER"  || user.getRole().toString() == "ADMIN") {
 			Product product = (Product) session.getAttribute("product");
 			String productName = request.getParameter("name");
 			String description = request.getParameter("description");
@@ -38,10 +38,23 @@ public class UpdateProductServlet extends HttpServlet {
 			if(product != null) {
 				productService.updateProduct(product);
 			}
-			List<Product> products = productService.getAllProducts();
-			request.setAttribute("products", products);
-			request.setAttribute("role", "INVENTORY_MANAGER");
-			request.getRequestDispatcher("/products.jsp").forward(request, response);
+			int pageSize = 10; 
+        	int currentPage = 1;  
+
+        	String pageParam = request.getParameter("page");
+        	if (pageParam != null && !pageParam.isEmpty()) {
+        	    currentPage = Integer.parseInt(pageParam);
+        	}
+
+        	int startIndex = (currentPage - 1) * pageSize;
+        	
+        	session.setAttribute("products", productService.getProductsPaginated(startIndex, pageSize));
+        	int totalProducts = productService.getTotalProductCount();
+        	int totalPages = (int) Math.ceil((double) totalProducts / pageSize);
+
+        	session.setAttribute("currentPage", currentPage);
+        	session.setAttribute("totalPages", totalPages);
+			response.sendRedirect("products");
 		}
 	}
 

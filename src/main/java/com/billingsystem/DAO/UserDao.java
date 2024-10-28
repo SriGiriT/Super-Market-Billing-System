@@ -1,5 +1,6 @@
 package com.billingsystem.DAO;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,14 +9,13 @@ import java.util.Map;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.Model.User.Role;
-import com.billingsystem.utility.DBConnectionUtil;
+import com.billingsystem.utility.DBConnectionPoolUtil;
 import com.billingsystem.utility.LoggerUtil;
 
 public class UserDao {
     public User findUserByPhoneNumber(String phoneNumber) {
-        String sql = "SELECT * FROM user WHERE phone_number = ?";
-        try {
-        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+        try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement("SELECT * FROM user WHERE phone_number = ?")	){
             ps.setString(1, phoneNumber);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -41,8 +41,8 @@ public class UserDao {
 
     public boolean save(User user) {
         String sql = "INSERT INTO user (user_name, password, phone_number, email, role) VALUES (?, ?, ?, ?, ?)";
-        try  {
-        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);        		
+        try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
         	ps.setString(1, user.getUserName());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getPhoneNumber());
@@ -60,8 +60,8 @@ public class UserDao {
     public void updatePassword(User user) {
         String sql = "UPDATE user SET password = ? WHERE phone_number = ?";
 
-        try  {
-        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);        		
+        try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	)  {
             ps.setString(1, user.getPassword());
             ps.setString(2, user.getPhoneNumber());
             ps.executeUpdate();
@@ -74,8 +74,8 @@ public class UserDao {
     public boolean assignRole(String phoneNumber, String role) {
     	String sql = "UPDATE user SET role = ? WHERE phone_number = ?";
     	
-        try  {
-        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);        		
+        try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	)  {
             ps.setString(1, role);
             ps.setString(2, phoneNumber);
             ps.executeUpdate();
@@ -89,8 +89,8 @@ public class UserDao {
     
     public boolean assignCurrentCredit(String phoneNumber, double current_credit) {
     	String sql = "UPDATE user SET current_credit = ? WHERE phone_number = ?";
-    	try {
-    		PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+    	try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
     		ps.setDouble(1, current_credit);
     		ps.setString(2, phoneNumber);
     		ps.executeUpdate();
@@ -104,14 +104,14 @@ public class UserDao {
 
 
 	public Map<String, String> getUsersRoleDetails() {
-		String sql = "Select role, phone_number from user";
+		String sql = "Select role, phone_number, user_name from user";
 		Map<String, String> userAndRole = new HashMap<>();
-		try {
-			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+		try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				userAndRole.put(rs.getString("phone_number"),rs.getString("role"));
+				userAndRole.put(rs.getString("phone_number")+"-"+rs.getString("user_name"),rs.getString("role"));
 	            
 			}
     		return userAndRole;
@@ -124,14 +124,14 @@ public class UserDao {
 
 
 	public Map<String, Double> getUsersCreditDetails() {
-		String sql = "Select phone_number, current_credit from user";
+		String sql = "Select phone_number, current_credit, user_name from user";
 		Map<String, Double> userAndRole = new HashMap<>();
-		try {
-			PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+		try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				userAndRole.put(rs.getString("phone_number"),rs.getDouble("current_credit"));
+				userAndRole.put(rs.getString("phone_number")+"-"+rs.getString("user_name"),rs.getDouble("current_credit"));
 	            
 			}
     		return userAndRole;
@@ -145,8 +145,8 @@ public class UserDao {
 
 	public boolean isEmailExist(String email) {
 		String sql = "SELECT * FROM user WHERE email = ?";
-        try {
-        	PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+        try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -166,11 +166,26 @@ public class UserDao {
 
 	public boolean makeTransaction(User user, double totalAmount) {
 		String sql = "UPDATE user SET current_credit = ?, points = ? WHERE phone_number = ?";
-    	try {
-    		PreparedStatement ps = DBConnectionUtil.getInstance().getConnection().prepareStatement(sql);
+    	try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
     		ps.setDouble(1, user.getCurrent_credit());
     		ps.setDouble(2, user.getPoints());
     		ps.setString(3, user.getPhoneNumber());
+    		ps.executeUpdate();
+    		return true;
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return false;
+    	}
+	}
+
+
+
+	public boolean addPointsToCashier(long cashierId) {
+		String sql = "UPDATE user SET points = points + 1 WHERE id = ?";
+		try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	) {
+    		ps.setLong(1, cashierId);
     		ps.executeUpdate();
     		return true;
     	}catch(Exception e) {

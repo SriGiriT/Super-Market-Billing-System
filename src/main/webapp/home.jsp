@@ -1,14 +1,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Welcome</title>
-    <link rel="stylesheet" href="styles.css"> 
+     <link rel="stylesheet" href="style_home.css"> 
 </head>
-<body>
+<body style="padding-top:0px;">
+<div class="content-container" 	style="max-width: 1200px;padding: 30px;">
     <h2>Welcome, ${user.userName}!</h2>
     
 	<%
@@ -25,23 +27,19 @@
     
    
     <p>You are logged in as <strong>${user.role}</strong>.</p>
-	<p>Information:<br/> Name: ${user.userName} <br/> Phone Number: ${user.phoneNumber} <br/>  Email: ${user.email} <br/>  Points: ${user.points} <br/>  Credits: ${user.current_credit} <br/> </p>
-	
+	<p>Information:<br/> Name: ${user.userName} <br/> Phone Number: ${user.phoneNumber} <br/>  Email: ${user.email} <br/>
+	<c:if test="${user.role == 'CUSTOMER' || user.role == 'INVENTORY_MANAGER'}">
+	    Credits: ${user.current_credit} <br/> 
+	</c:if>
+	<c:if test="${user.role != 'ADMIN'}">
+		Points: <fmt:formatNumber value="${user.points}" pattern="#,##0.00" /><br/>
+	</c:if>
 	<c:if test="${user.role == 'ADMIN'}">
-        <p><a href="loadUsersAndRoles"  target="_blank">Assign Role</a></p>
-        <p><a href="loadUsersAndCredit"  target="_blank">Add Credit</a></p>
-    </c:if>
-    <c:if test="${user.role == 'CASHIER'}">
-        <p><a href="cashier.jsp"  target="_blank">Bill Items</a></p>
-    </c:if>
-    <c:if test="${user.role == 'ADMIN' || user.role == 'CUSTOMER'}">
-    	<p><a href="reports.jsp"  target="_blank">View Reports</a></p>
-    </c:if>
-    	<p><a href="products">View Products</a></p>
+		Total Earned: ${totalEarnings}  <br/>
+	</c:if>
 
-    <p><a href="change_password.jsp" target="_blank">Change Password</a></p>
-    <form id='logoutForm' action="logout" method="post">
-    	<p><a href="javascript:;" onclick="document.getElementById('logoutForm').submit();">Logout</a></p>
-    </form>
+    </p>
+    <a href="change_password.jsp">Change password</a>
+    </div>
 </body>
 </html>

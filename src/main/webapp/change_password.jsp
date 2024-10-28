@@ -1,16 +1,22 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="header.jsp" %>
 <!DOCTYPE html>
 <html>
 <head>
     <title>Change Password</title>
+    <link rel="stylesheet" href="style_home.css"> 
 </head>
 <body>
+<div class="content-container" style="max-width: 600px;" >
 <h2>Change Password</h2>
 <c:if test="${not empty NeedToChange}">
 	<div>${NeedToChange}</div>
 </c:if>
 <form action="changePassword" method="post"  onsubmit="return checkLogin(this);">
+	<c:if test="${user == null}">
+		<label for="phoneNumber">Phone Number :</label>
+    	<input type="text" name="phoneNumber" pattern="\d{10}" title="Please enter a 10-digit phone number."/><br/>
+	</c:if>
     <label for="existingPassword">Existing Password:</label>
     <input type="password" name="existingPassword" required/><br/>
 
@@ -29,7 +35,7 @@
             <c:out value="${successMessage}"/>
         </h4>
     </c:if>
-    <br/><p><a href="home.jsp">Go Home</a></p>
+    </div>
     <script type="text/javascript">
     	function checkLogin(form){
     		if(form.existingPassword.value==""){

@@ -25,6 +25,9 @@ public class UserService {
     	}
     	return null;
     }
+    public boolean addPointsToCashier(long cashierId) {
+    	return userDao.addPointsToCashier(cashierId);
+    }
     public boolean makeTransaction(User user, double totalAmount) {
     	user.setCurrent_credit(user.getCurrent_credit()-totalAmount);
     	user.setPoints(user.getPoints()+totalAmount/100);

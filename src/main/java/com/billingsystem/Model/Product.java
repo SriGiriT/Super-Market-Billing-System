@@ -1,7 +1,7 @@
 package com.billingsystem.Model;
 
 public class Product {
-	private long id;
+	private int id;
     private String name;
     private String description;
     private double price;
@@ -25,11 +25,11 @@ public class Product {
     	
     }
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

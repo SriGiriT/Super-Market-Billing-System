@@ -18,7 +18,7 @@ public class CreateUserServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		UserService userService = new UserService();
 		HttpSession session = request.getSession(false);
 		String customerPhoneNumber = request.getParameter("customerPhoneNumber").toString();
@@ -41,7 +41,7 @@ public class CreateUserServlet extends HttpServlet {
     		session.setAttribute("customerExist", "Customer Created You can Proceed with Billing!");
     		
         }
-		request.getRequestDispatcher("cashier.jsp").forward(request, response);
+		request.getRequestDispatcher("products").forward(request, response);
 		
 	}
 

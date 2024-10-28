@@ -20,7 +20,8 @@ public class RoleAssignmentServlet extends HttpServlet {
         User adminUser = (User) session.getAttribute("user");
         System.out.println(adminUser);
         if (adminUser != null && "ADMIN".equals(adminUser.getRole().toString())) {
-            String mobileNumber = request.getParameter("mobileNumber");
+            String mobileNumberAndName = request.getParameter("mobileNumber");
+            String mobileNumber = mobileNumberAndName.split("-")[0];
             String role = request.getParameter("role");
             
             UserService userService = new UserService();

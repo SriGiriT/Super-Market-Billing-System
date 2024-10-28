@@ -1,0 +1,201 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* General Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header Navigation Styling */
+nav {
+    background-color: #4CAF50;
+    width: 100%;
+    padding: 10px 0;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+nav li {
+    margin: 0 15px;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #3e8e41;
+}
+
+input[type="submit"] {
+    width: calc(100% - 20px);
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    font-size: 16px;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Main Content Container */
+.content-container {
+    width: 90%;
+    background-color: #ffffff;
+    padding: 25px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+/* Product Page Styling */
+.product-section, .cart-section {
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.product-section h2, .cart-section h2 {
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 4px;
+}
+
+th {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Form Styling */
+form {
+    margin: 10px 0;
+}
+textarea,
+form input[type="text"],
+form input[type="number"],
+form input[type="password"],
+form select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    width: calc(100% - 20px);
+    margin: 10px 0;
+}
+form button {
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #3e8e41;
+}
+
+/* Pagination Styling */
+.pagination {
+    display: contents;
+    margin: 20px 0;
+}
+
+.pagination a, .pagination strong {
+    padding: 8px 12px;
+    margin: 0 5px;
+    color: #4CAF50;
+    border: 1px solid #4CAF50;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.pagination strong {
+    background-color: #4CAF50;
+    color: #ffffff;
+}
+
+/* Coupon and Error Messages */
+.coupon, .error {
+    font-weight: bold;
+    margin-top: 10px;
+    color: #d9534f;
+}
+table td input {
+	padding:4px ! important;
+
+	}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .content-container, .product-section, .cart-section {
+        padding: 15px;
+    }
+
+    table, th, td {
+        font-size: 14px;
+        padding: 3px;
+    }
+
+    form input[type="text"],
+    form input[type="number"],
+    form select,
+    form button {
+        width: 100%;
+        margin: 8px 0;
+    }
+}

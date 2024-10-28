@@ -9,6 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.Product;
 import com.billingsystem.service.ProductService;
@@ -22,8 +23,9 @@ public class SearchProduct extends HttpServlet {
 	@Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String searchType = request.getParameter("searchType"); 
-        String searchQuery = request.getParameter("searchQuery");
+		 String searchType = request.getParameter("searchType"); 
+	        String searchQuery = request.getParameter("searchQuery");
+        HttpSession session = request.getSession(false);
         ProductService productService = new ProductService();
         List<Product> productList = productService.getAllProducts();
         List<Product> searchResults = new ArrayList<>(); 
@@ -42,7 +44,7 @@ public class SearchProduct extends HttpServlet {
                     .filter(p -> p.getName().toLowerCase().contains(searchQuery.toLowerCase()))
                     .forEach(searchResults::add);
         }
-
+        session.setAttribute("role", request.getParameter("role"));
         request.setAttribute("searchResults", searchResults);
         request.getRequestDispatcher("products.jsp").forward(request, response);
     }

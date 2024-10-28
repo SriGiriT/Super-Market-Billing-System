@@ -69,7 +69,7 @@ public static String[] sendInvoiceEmail(String recipientEmail, String subject, I
 
             message.setContent(multipart);
 
-//            Transport.send(message);
+            Transport.send(message);
 
             System.out.println("Email sent successfully with PDF attached.");
         } catch (MessagingException e) {

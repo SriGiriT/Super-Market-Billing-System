@@ -1,43 +1,45 @@
 package com.billingsystem.service;
 
-import java.sql.ResultSet;
 
 import com.billingsystem.DAO.ReportDao;
 
 public class ReportService {
 	ReportDao reportDao = new ReportDao();
-	public ResultSet getTopSellingProducts() {
+	public String getTopSellingProducts() {
 		return reportDao.getTopSessingProducts();
 	}
-	public ResultSet getTopCustomers() {
+	public String getTopCustomers() {
 		return reportDao.getTopCustomers();
 	}
-	public ResultSet getInactiveCustomers() {
+	public String getInactiveCustomers() {
 		return reportDao.getInactiveCustomers();
 	}
-	public ResultSet getDailyRevenue() {
+	public String getDailyRevenue() {
 		return reportDao.getDailyRevenue();
 	}
-	public ResultSet getSignedUpButNoPurchase() {
+	public String getSignedUpButNoPurchase() {
 		return reportDao.getSignedUpButNoPurchase();
 	}
-	public ResultSet getLowStockProducts() {
+	public String getLowStockProducts() {
 		return reportDao.getLowStockProducts();
 	}
-	public ResultSet getfrequentlyBoughtItem(int userId) {
+	public String getfrequentlyBoughtItem(int userId) {
 		return reportDao.getfrequentlyBoughtItem(userId);
 	}
-	public ResultSet getAllBillStatemetns(int userId) {
+	public String getAllBillStatemetns(int userId) {
 		return reportDao.getAllBillStatements(userId);
 	}
-	public ResultSet getTopCashier() {
+	public String getTopCashier() {
 		return reportDao.getTopCashier();
 	}
-	public ResultSet getUnsoldProducts() {
+	public String getUnsoldProducts() {
 		return reportDao.getUnsoldProducts();
 	}
-	public ResultSet getOutOfStockProducts() {
+	public String getOutOfStockProducts() {
 		return reportDao.getOutOfStockProducts();
+	}
+	public String getPurchaseDetails(int transactionId) {
+		return reportDao.getPurchaseDetails(transactionId);
 	}
 
 }

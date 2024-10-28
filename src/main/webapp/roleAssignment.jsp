@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="header.jsp" %>
 <html>
 <head>
     <title>Assign Roles</title>
@@ -31,8 +32,10 @@
             });
         }
     </script>
+    <link rel="stylesheet" href="style_home.css"> 
 </head>
 <body>
+<div   class="content-container" style="max-width: 600px;">
     <h2>Assign Roles</h2>
     <form action="assignRole" method="post">
         Mobile Number:
@@ -55,5 +58,6 @@
     <c:if test="${not empty message}">
         <p style="color:green">${message}</p>
     </c:if>
+ </div>
 </body>
 </html>
