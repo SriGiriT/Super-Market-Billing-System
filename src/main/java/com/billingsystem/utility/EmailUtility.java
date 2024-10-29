@@ -30,7 +30,7 @@ public class EmailUtility {
 	private static String host = "smtp.gmail.com"; 
     private static String from = "srigiriboopathy@gmail.com";
     private static String username = "srigiriboopathy@gmail.com"; 
-    private static String password = "glszjzjeugnxpmfd"; 
+    private static String password = System.getenv("SMTP_SECRET_KEY"); 
 	
 public static String[] sendInvoiceEmail(String recipientEmail, String subject, Invoice invoice, Double providedOffer) throws Exception {
 		
@@ -52,7 +52,7 @@ public static String[] sendInvoiceEmail(String recipientEmail, String subject, I
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("your-email@example.com"));
+            message.setFrom(new InternetAddress(from));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(invoice.getCustomer().getEmail()));
             message.setSubject("Invoice for your Purchase");
 
@@ -108,7 +108,7 @@ public static String[] sendInvoiceEmail(String recipientEmail, String subject, I
 	
 	 private static String generateInvoicePDF(Invoice invoice, double providedOffer) throws DocumentException, FileNotFoundException {
 	        Document document = new Document();
-	        String pdfPath = "C:\\Users\\srigiri-20969\\prog\\git_clone\\Super-Market-Billing-System\\src\\main\\webapp\\Invoice.pdf";
+	        String pdfPath = "C:\\Users\\srigiri-20969\\prog\\git_clone\\Super-Market-Billing-System\\src\\main\\webapp\\Invoice_"+invoice.getId()+".pdf";
 	        PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
 	        document.open();

@@ -178,7 +178,7 @@ public class ReportDao {
 	     			for(String eachRow: new String[]{"total_amount", "date", "transaction_id"}) {
 	     				
 	     				if(eachRow.equals("transaction_id")) {
-	     					result.append("<td><a href='ReportServlet?action=viewPurchaseDetails&transactionId="+rs.getString(eachRow)+"'>"+rs.getString(eachRow)+"</a></td>");
+	     					result.append("<td><a href='ReportServlet?action=viewPurchaseDetails&transactionId="+rs.getString(eachRow)+"' style='color:white;'>"+rs.getString(eachRow)+"</a></td>");
 	     				}else {
 	     					result.append("<td>"+rs.getString(eachRow)+"</td>");
 	     				}

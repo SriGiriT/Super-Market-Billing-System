@@ -31,7 +31,6 @@ public class UserDao {
                 return user;
             }
         } catch (SQLException e) {
-        	LoggerUtil.getInstance().logException("error in findUserByPhoneNumber", e);
             e.printStackTrace();
         }
         return null;
@@ -155,7 +154,6 @@ public class UserDao {
             	return false;
             }
         } catch (SQLException e) {
-        	LoggerUtil.getInstance().logException("error in findUserByEmail", e);
             e.printStackTrace();
             return true;
         }

@@ -29,7 +29,7 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         UserService userService = new UserService();
         Cookie[] cookies = httpRequest.getCookies();
-        if(httpRequest.getRequestURI().contains("signup") || httpRequest.getRequestURI().startsWith("/login") || httpRequest.getRequestURI().startsWith("style") || httpRequest.getRequestURI().contains("change_password")) {
+        if(httpRequest.getRequestURI().contains("signup") || httpRequest.getRequestURI().contains("/login") || httpRequest.getRequestURI().startsWith("style") || httpRequest.getRequestURI().contains("change_password") || httpRequest.getRequestURI().contains("changePassword")) {
         	chain.doFilter(request, response);
         	return;
         }
@@ -47,6 +47,12 @@ public class AuthenticationFilter implements Filter {
             if (decodedJWT != null) {
                 String phoneNumber = JWTUtil.getPhoneNumber(decodedJWT);
                 String role = JWTUtil.getRole(decodedJWT);
+                String IpAddressInToken = JWTUtil.getClientIp(decodedJWT);
+                String currentIpAddress = request.getRemoteAddr();
+                if(!currentIpAddress.equals(IpAddressInToken)) {
+                	httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "IP Address Mismatch");
+                	return;
+                }
                 User user = (User)(session != null ? session.getAttribute("user") : null);
                 if(user == null) {
                 	user = userService.checkUser(phoneNumber);

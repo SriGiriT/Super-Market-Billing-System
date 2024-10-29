@@ -19,7 +19,7 @@ body {
     font-family: Arial, sans-serif;
     background-color:#f4f4f9;
    	background-image:url('https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg');
-   	background-size: cover;        
+   	background-size: cover;     backdrop-filter: blur(5px);   
     background-position: center;   
     background-repeat: no-repeat;  
     color: #ffffff;
@@ -149,13 +149,13 @@ a[target="_blank"] {
      </style>
 </head>
 <body>
-<div  class="logsignform" style="background: rgba( 0, 0, 0, 0.55 );
+<div  class="logsignform" style="background: rgba( 0, 0, 0, 0.8 );
 box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 4px );
--webkit-backdrop-filter: blur( 4px );
+backdrop-filter: blur( 20px );
+-webkit-backdrop-filter: blur( 20px );
 border-radius: 10px;
 border: 1px solid rgba( 255, 255, 255, 0.18 );">
-    <h2>Sign Up for Supermarket Billing System</h2>
+    <h2>Sign Up</h2>
     
     <form action="signup" method="post" onsubmit="return checkLogin(this);">
      	<label for="userName">User Name:</label>

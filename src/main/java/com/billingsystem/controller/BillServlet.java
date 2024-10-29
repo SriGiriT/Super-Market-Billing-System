@@ -94,7 +94,6 @@ public class BillServlet extends HttpServlet {
 	                        emailConfirmation = EmailUtility.sendInvoiceEmail(user.getEmail(),subject ,  invoice, providedOffer);
 	                        
 	                    } catch (Exception e) {
-	                    	LoggerUtil.getInstance().logException("Error in Updating invoice", e);
 	                        e.printStackTrace();
 	                    }
 	
@@ -108,7 +107,7 @@ public class BillServlet extends HttpServlet {
 	                    session.removeAttribute("customerExist");
 	                    session.removeAttribute("appliedCouponCode");
 	                    if(emailConfirmation != null) {
-	                    	session.setAttribute("pdfPath", emailConfirmation[1].substring(emailConfirmation[1].lastIndexOf("webapp\\")+6));
+	                    	session.setAttribute("pdfPath", emailConfirmation[1]);
 	                    	session.setAttribute("invoiceBody", emailConfirmation[0].replaceAll("\n", "<br>"));
 	                    }
 	                    response.sendRedirect("confirmation.jsp");

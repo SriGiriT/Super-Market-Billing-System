@@ -9,8 +9,16 @@
     <title>Welcome</title>
      <link rel="stylesheet" href="style_home.css"> 
 </head>
-<body style="padding-top:0px;">
-<div class="content-container" 	style="max-width: 1200px;padding: 30px;">
+<body style="padding-top:0px;background-image:url('https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg');
+   	background-size: cover;backdrop-filter: blur(5px);        
+    background-position: center;   
+    background-repeat: no-repeat; color:white " >
+<div class="content-container" 	style="max-width: 1200px;padding: 30px;display:flex; flex-direction:column;background: rgba( 0, 0, 0, 0.8 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 20px );
+-webkit-backdrop-filter: blur( 20px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );">
     <h2>Welcome, ${user.userName}!</h2>
     
 	<%
@@ -39,7 +47,7 @@
 	</c:if>
 
     </p>
-    <a href="change_password.jsp">Change password</a>
+    <a href="change_password.jsp" style="color:white">Change password</a>
     </div>
 </body>
 </html>

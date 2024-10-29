@@ -13,6 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    
 }
 
 /* Header Navigation Styling */
@@ -100,6 +101,7 @@ table {
 }
 
 table, th, td {
+	color:white ! important;
     border: 1px solid #ddd;
     text-align: center;
     padding: 4px;
@@ -107,11 +109,18 @@ table, th, td {
 
 th {
     background-color: #4CAF50;
-    color: #ffffff;
+
 }
 
+
 tr:nth-child(even) {
-    background-color: #f9f9f9;
+	background: black ! important;
+	color:white !important;
+}
+
+input :nth-child(even){
+	background: black ! important;
+	color:white !important;
 }
 
 /* Form Styling */
@@ -198,4 +207,13 @@ table td input {
         width: 100%;
         margin: 8px 0;
     }
+}
+select{
+	background: black ! important;
+	color:white;
+}
+
+input{
+	background:none;
+	color:white;
 }

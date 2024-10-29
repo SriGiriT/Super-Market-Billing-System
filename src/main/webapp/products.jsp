@@ -9,8 +9,16 @@
     <title>Supermarket Products</title>
     <link rel="stylesheet" type="text/css" href="style_home.css">
 </head>
-<body style="padding-top:0px">
-	<div style="display:flex;justify-content:space-between;width: 1500px;padding: 10px;" class="content-container">
+<body style="padding-top:0px;background-image:url('https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg');
+   	background-size: cover;backdrop-filter: blur(5px);        
+    background-position: center;   
+    background-repeat: no-repeat;  ">
+	<div style="display:flex;justify-content:space-between;width: 1500px;padding: 10px;background: rgba( 0, 0, 0, 0.8 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 20px );
+-webkit-backdrop-filter: blur( 20px );
+border-radius: 10px;color:white;
+border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
 	<div class="product-section" style="width:1200px">
 	<span>Search Products</span>
     <form action="products" style="display:contents;">
@@ -23,7 +31,7 @@
     </form>
 	
     <c:if test="${not empty searchResults}">
-        <h2>Search Results</h2>
+        <h2 style="color:white;">Search Results</h2>
         <form action="CartServlet" method="post">
             <table border="1" class="product-table">
                 <tr>
@@ -67,12 +75,12 @@
 	                        </c:if>
 	                        <c:if test="${user.role== 'INVENTORY_MANAGER'}">
                             	<td>&#8377; <fmt:formatNumber value="${product.buyerPrice}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></td>
-                        		<td><a href="products?productId=${product.id}">Update Product</a></td>
+                        		<td><a href="products?productId=${product.id}" style="color:white;">Update Product</a></td>
                         	</c:if>
                         <c:if test="${user.role != 'ADMIN' }">
 	                        <td>
 	                            <input type="hidden" name="productIds" value="${product.id}" />
-	                            <input type="number" name="quantities" class="input-quantity"  value="0" min="0" max="${product.stockLeft}" />
+	                            <input type="number" name="quantities" class="input-quantity"  value="0" min="0" max="${user.role=='INVENTORY_MANAGER' ? product.usualStock : product.stockLeft}" />
 	                        </td>
                         </c:if>
                         <c:if test="${user.role == 'ADMIN' }">
@@ -80,13 +88,13 @@
 	                        <td>&#8377; <fmt:formatNumber value="${product.buyerPrice}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></td>
 	                        <td>&#8377; <fmt:formatNumber value="${product.price - product.buyerPrice}" type="currency"  currencySymbol="₹" pattern="#,##0.00"/></td>
 	                        <td>${product.totalSold}</td>
-	                        <td><a href="products?productId=${product.id}">Update Product</a></td>
+	                        <td><a href="products?productId=${product.id}" style="color:white;">Update Product</a></td>
                         </c:if>
                     </tr>
                 </c:forEach>
             </table>
             <c:if test="${user.role != 'ADMIN'}">
-            	<button type="submit" class="button-submit">Add to Cart</button>
+            	<button type="submit" class="button-submit" >Add to Cart</button>
             </c:if>
         </form>
     </c:if>
@@ -132,7 +140,7 @@
 	                        </c:if>
 	                        <c:if test="${user.role== 'INVENTORY_MANAGER' }">
                             	<td>&#8377; <fmt:formatNumber value="${product.buyerPrice}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></td>
-                        		<td><a href="products?productId=${product.id}">Update Product</a></td>
+                        		<td><a href="products?productId=${product.id}" style="color:white;" >Update Product</a></td>
                         	</c:if>
                             <td>
                                 <input type="hidden" name="productIds" value="${product.id}" />
@@ -175,7 +183,7 @@
         </c:when>
         <c:when test="${user.role == 'ADMIN'}">
         <c:if test="${empty searchResults}">
-        	<h2>Product List</h2>
+        	<h2 style="color:white;">Product List</h2>
             <table border="1"  class="product-table">
                 <tr>
                 	<th>Product ID</th>
@@ -198,11 +206,11 @@
                         <td>&#8377; <fmt:formatNumber value="${product.buyerPrice}" type="currency"  currencySymbol="₹" pattern="#,##0.00"/></td>
                         <td>&#8377; <fmt:formatNumber value="${product.price - product.buyerPrice}" type="currency"  currencySymbol="₹" pattern="#,##0.00"/></td>
                         <td>${product.totalSold}</td>
-                        <td><a href="products?productId=${product.id}">Update Product</a></td>
+                        <td><a href="products?productId=${product.id}" style="color:white;">Update Product</a></td>
                     </tr>
                 </c:forEach>
             </table>
-            <div class="pagination">
+            <div class="pagination"  style="display:initial;position:sticky;left:500px;">
                 <c:if test="${currentPage > 1}">
                     <a href="?page=${currentPage - 1}">Previous</a>
                 </c:if>
@@ -227,9 +235,9 @@
     </c:choose>
 	
     </div>
-    <div class="cart-section">
+    <div class="cart-section" id="cartSection" >
     <c:if test="${not empty cart.items}">
-        <h2>Selected Products</h2>
+        <h2 style="color:white;">Selected Products</h2>
         <form action="UpdateCartServlet" method="post">
             <table border="1"  class="cart-table">
                 <thead>

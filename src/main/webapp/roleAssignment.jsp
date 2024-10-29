@@ -34,8 +34,17 @@
     </script>
     <link rel="stylesheet" href="style_home.css"> 
 </head>
-<body>
-<div   class="content-container" style="max-width: 600px;">
+<body style="background-image:url('https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg');
+   	background-size: cover;        
+    background-position: center;color:white; 
+    backdrop-filter: blur(5px);
+    background-repeat: no-repeat;">
+<div   class="content-container" style="max-width: 600px;background: rgba( 0, 0, 0, 0.8 );
+box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+backdrop-filter: blur( 20px );
+-webkit-backdrop-filter: blur( 20px );
+border-radius: 10px;
+border: 1px solid rgba( 255, 255, 255, 0.18 );">
     <h2>Assign Roles</h2>
     <form action="assignRole" method="post">
         Mobile Number:

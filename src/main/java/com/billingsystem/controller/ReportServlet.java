@@ -1,6 +1,9 @@
 package com.billingsystem.controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -134,7 +137,26 @@ public class ReportServlet extends HttpServlet {
 	        		+ "<link rel=\"stylesheet\" href=\"style_home.css\">"
 	        		
 	        		+ "</head>");
-	        response.getWriter().println("<body><div class='content-container'><table><thead><tr>");
+	        try {
+				response.getWriter().println("<body style=\"background-image:url('"+new URI("https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg").toURL()+"');"
+						+ "   	background-size: cover; backdrop-filter: blur(5px);        "
+						+ "    background-position: center;   "
+						+ "    background-repeat: no-repeat; color:white"
+						+ "\">");
+			} catch (MalformedURLException e) {
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        response.getWriter().println("<div class='content-container' style=\"background: rgba( 0, 0, 0, 0.8 ); "
+	        +"box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );"+
+	        "backdrop-filter: blur( 20px );"+
+	         "-webkit-backdrop-filter: blur( 20px );"+
+	         "border-radius: 10px;color:white;"+
+	         "border: 1px solid rgba( 255, 255, 255, 0.18 );\"><table><thead><tr>");
 	        for(String eachTitle:reportTitle) {
 	        	response.getWriter().println("<th>"+eachTitle+"</th>");
 	        }

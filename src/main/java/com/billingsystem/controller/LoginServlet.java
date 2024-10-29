@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
             if(user.getRole().toString().equals("ADMIN")) {
             	session.setAttribute("totalEarnings", transactionService.getTotalTransaction());
             }
-            String token = JWTUtil.generateToken(user.getPhoneNumber(), user.getRole().toString());
+            String token = JWTUtil.generateToken(user.getPhoneNumber(), user.getRole().toString(), request.getRemoteAddr());
             Cookie cookie = new Cookie("auth_token", token);
             cookie.setHttpOnly(true);
             cookie.setMaxAge(300*60);

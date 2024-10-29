@@ -19,6 +19,7 @@ body {
     font-family: Arial, sans-serif;
     background-color:#f4f4f9;
    	background-image:url('https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg');
+   	backdrop-filter: blur(5px);
    	background-size: cover;        
     background-position: center;   
     background-repeat: no-repeat;  
@@ -149,10 +150,10 @@ a[target="_blank"] {
 	</style>
 </head>
 <body>
-    <div style="display:flex; flex-direction:column;background: rgba( 0, 0, 0, 0.55 );
+    <div style="display:flex; flex-direction:column;background: rgba( 0, 0, 0, 0.8 );
 box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-backdrop-filter: blur( 4px );
--webkit-backdrop-filter: blur( 4px );
+backdrop-filter: blur( 20px );
+-webkit-backdrop-filter: blur( 20px );
 border-radius: 10px;
 border: 1px solid rgba( 255, 255, 255, 0.18 );" class="logsignform">
         <c:if test="${not empty successMessage}">
@@ -160,7 +161,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="logsignform">
                 <c:out value="${successMessage}"/>
             </h4>
         </c:if>
-        <h2>Login to Supermarket Billing System</h2>
+        <h2>Sign in</h2>
         
         <form action="login" method="post" onsubmit="return checkLogin(this);">
             <label for="phoneNumber">Mobile Number:</label>

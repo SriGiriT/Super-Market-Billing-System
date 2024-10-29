@@ -38,7 +38,11 @@ public class ProductServlet extends HttpServlet {
         if(productId == null) {
         	if(searchType != null && searchQuery != null) {
         		if("id".equals(searchType)) {
-        			productList.add(productService.getProductByID(Integer.parseInt(searchQuery)));
+        			try {
+        				productList.add(productService.getProductByID(Integer.parseInt(searchQuery)));
+        			}catch(NumberFormatException e) {
+        				e.printStackTrace();
+        			}
         		}else if("name".equals(searchType)) {
         			productList = productService.getProductsByName(searchQuery);
         		}

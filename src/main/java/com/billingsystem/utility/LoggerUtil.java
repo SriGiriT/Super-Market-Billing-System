@@ -22,22 +22,4 @@ public class LoggerUtil {
         }
         return  loggingClass;
     }
-    public void logInfo(String message){
-        logger.info(message);
-    }
-    public void logTrace(String message){
-        logger.trace(message);
-    }
-    public void logDebug(String message){
-        logger.debug(message);
-    }
-    public void logWarn(String message){
-        logger.warn(message);
-    }
-    public void logError(String message){
-        logger.error(message);
-    }
-    public void logException(String message, Exception e){
-        logger.error(message, e);
-    }
 }
