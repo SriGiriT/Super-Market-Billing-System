@@ -8,13 +8,12 @@
 <meta charset="UTF-8">
 <title>Confirmation Page</title>
 	<script>
-        function printPDF(pdfUrl) {
-        	console.log(pdfUrl);
-            var win = window.open(pdfUrl, '_blank');
-            win.onload = function() {
-                win.print();
-            };
-        }
+	function printPDF() {
+        const pdfWindow = window.open('DownloadPdfServlet?action=print', '_blank');
+        pdfWindow.onload = function () {
+            pdfWindow.print();
+        };
+    }
     </script>
     <link rel="stylesheet" href="style_home.css"> 
 </head>
@@ -33,18 +32,17 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );">
     <p>
     ${invoiceBody}
     </p>
-    <% 
-    response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0");
-    response.setHeader("Pragma", "no-cache");
-    response.setDateHeader("Expires", 0);
-    %>
-    <form>
-    <button class="button-submit">
-    
-    <a href="${pdfPath}" style="color: white;text-decoration:none;" download>Download Invoice</a>
-    </button>
-    <button class="button-submit" onclick="printPDF('${pdfPath}')">Print Invoice</button>
+    <br/><br/>
+      <form action="DownloadPdfServlet" method="post" style="display:inline;margin-right:20px;">
+        <button type="submit">Download PDF</button>
     </form>
+    <button onclick="printPDF()" style="    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;">Print PDF</button>
     </div>
     </div>
 </body>

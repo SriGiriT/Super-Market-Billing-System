@@ -5,6 +5,8 @@
 <head>
     <title>Change Password</title>
     <link rel="stylesheet" href="style_home.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
 </head>
 <body style="color:white;background-image:url('https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg');
    	background-size: cover;backdrop-filter: blur(5px);        
@@ -16,7 +18,7 @@ backdrop-filter: blur( 20px );
 -webkit-backdrop-filter: blur( 20px );
 border-radius: 10px;
 border: 1px solid rgba( 255, 255, 255, 0.18 );" >
-<h2>Change Password</h2>
+<h2 style="color:white;">Change Password</h2>
 <c:if test="${not empty NeedToChange}">
 	<div>${NeedToChange}</div>
 </c:if>
@@ -26,13 +28,28 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" >
     	<input type="text" name="phoneNumber" pattern="\d{10}" title="Please enter a 10-digit phone number."/><br/>
 	</c:if>
     <label for="existingPassword">Existing Password:</label>
-    <input type="password" name="existingPassword" required/><br/>
+    <div class="password-container">
+                <input type="password" id="existingPassword" name="existingPassword" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('existingPassword')">
+                    <i class="fas fa-eye" id="existingPasswordIcon"></i>
+                </button>
+            </div>
 
     <label for="password">New Password:</label>
-    <input type="password" name="password" required/><br/>
+    <div class="password-container">
+                <input type="password" id="password" name="password" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                    <i class="fas fa-eye" id="passwordIcon"></i>
+                </button>
+            </div>
 
     <label for="confirmPassword">Confirm New Password:</label>
-    <input type="password" name="confirmPassword" required/><br/>
+    <div class="password-container">
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                    <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                </button>
+            </div>
 	<c:if test="${not empty errorMessage }">
 		<div class="error">${errorMessage }
 		</div><br/>
@@ -108,10 +125,20 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" >
             }
         }
 
-        window.onload = function() {
-        	console.log("onload");
-            
-        };
+    	function togglePassword(elementId) {
+          	 const passwordField = document.getElementById(elementId);
+               const toggleIcon = document.getElementById(elementId+"Icon");
+               if (passwordField.type === "password") {
+                   passwordField.type = "text";
+                   toggleIcon.classList.remove("fa-eye");
+                   toggleIcon.classList.add("fa-eye-slash");
+               } else {
+                   passwordField.type = "password";
+                   toggleIcon.classList.remove("fa-eye-slash");
+                   toggleIcon.classList.add("fa-eye");
+               }
+          }
+        
     </script>
 </form>
 </body>

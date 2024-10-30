@@ -217,3 +217,32 @@ input{
 	background:none;
 	color:white;
 }
+.password-container {
+            position: relative;
+            display: flex;
+            left:10px;
+            align-items: center;
+        }
+
+        /* Password input */
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        /* Eye icon styling */
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #4CAF50;
+            background: none;
+            border: none;
+            outline: none;
+        }

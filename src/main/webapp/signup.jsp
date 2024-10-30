@@ -145,8 +145,38 @@ a[target="_blank"] {
         font-size: 14px;
     }
 }
-     	
+     	.password-container {
+            position: relative;
+            display: flex;
+            left:10px;
+            align-items: center;
+        }
+
+        /* Password input */
+        .password-container input[type="password"],
+        .password-container input[type="text"] {
+            width: calc(100% - 40px);
+            padding: 10px;
+            
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        /* Eye icon styling */
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #4CAF50;
+            background: none;
+            border: none;
+            outline: none;
+        }
      </style>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+     
 </head>
 <body>
 <div  class="logsignform" style="background: rgba( 0, 0, 0, 0.8 );
@@ -165,10 +195,20 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );">
         <input type="text" id="phoneNumber" name="phoneNumber"  value="${phoneNumber}" required><br><br>
         
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" value="${password}" required><br><br>
+        <div class="password-container">
+                <input type="password" id="password" name="password"  value="${password}"  required>
+                <button type="button" class="toggle-password" onclick="togglePassword('password')">
+                    <i class="fas fa-eye" id="passwordIcon"></i>
+                </button>
+            </div>
         
         <label for="confirmPassword">Confirm Password:</label>
-        <input type="password" id="confirmPassword" name="confirmPassword" value="${password}"  required><br><br>
+        <div class="password-container">
+                <input type="password" id="confirmPassword" name="confirmPassword"  value="${password}"   required>
+                <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                    <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+                </button>
+            </div>
         
         <label for="email">Email:</label>
         <input type="text" id="email" name="email" value="${email}"  required><br><br>
@@ -242,6 +282,20 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );">
             }
     		return true;
     	}
+    	
+    	function togglePassword(elementId) {
+       	 const passwordField = document.getElementById(elementId);
+            const toggleIcon = document.getElementById(elementId+"Icon");
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
+       }
     </script>
 </body>
 </html>
