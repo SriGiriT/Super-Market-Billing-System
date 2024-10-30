@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +29,7 @@ public class UserDao {
                 user.setEmail(rs.getString("email"));
                 user.setPoints(rs.getDouble("points"));
                 user.setCurrent_credit(rs.getDouble("current_credit"));
+                user.setVerified(rs.getBoolean("isVerified"));
                 return user;
             }
         } catch (SQLException e) {
@@ -36,18 +38,37 @@ public class UserDao {
         return null;
     }
     
+    public boolean verifyUser(Long user_id) {
+    	String sql = "UPDATE user SET isVerified = true WHERE id = ?";
+
+        try (Connection connection = DBConnectionPoolUtil.getConnection();
+        		PreparedStatement ps = connection.prepareStatement(sql)	)  {
+            ps.setLong(1, user_id);
+            ps.executeUpdate();
+            return true;
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
     
 
     public boolean save(User user) {
         String sql = "INSERT INTO user (user_name, password, phone_number, email, role) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = DBConnectionPoolUtil.getConnection();
-        		PreparedStatement ps = connection.prepareStatement(sql)	) {
+        		PreparedStatement ps = connection.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS)	) {
         	ps.setString(1, user.getUserName());
             ps.setString(2, user.getPassword());
             ps.setString(3, user.getPhoneNumber());
             ps.setString(4, user.getEmail());
             ps.setString(5, user.getRole().toString());
             ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
+            if(rs.next()) {
+            	user.setId(rs.getLong(1));
+            }
             return true;
         } catch (SQLException e) {
             e.printStackTrace();

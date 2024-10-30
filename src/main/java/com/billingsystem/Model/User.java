@@ -11,7 +11,7 @@ public class User {
     private String email;
     private double current_credit;
     private double points;
-
+    private boolean isVerified;
 
     public enum Role {
         ADMIN, CASHIER, INVENTORY_MANAGER, CUSTOMER
@@ -85,6 +85,14 @@ public class User {
 	
 	
 	
+	public boolean isVerified() {
+		return isVerified;
+	}
+
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
+	}
+
 	public double getCurrent_credit() {
 		return current_credit;
 	}

@@ -2,6 +2,7 @@ package com.billingsystem.utility;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
@@ -20,6 +21,7 @@ import javax.mail.internet.MimeMultipart;
 
 import com.billingsystem.Model.CartItem;
 import com.billingsystem.Model.Invoice;
+import com.billingsystem.service.VerificationService;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -32,7 +34,7 @@ public class EmailUtility {
     private static String username = "srigiriboopathy@gmail.com"; 
     private static String password = System.getenv("SMTP_SECRET_KEY"); 
 	
-public static String[] sendInvoiceEmail(String recipientEmail, String subject, Invoice invoice, Double providedOffer) throws Exception {
+    public static String[] sendInvoiceEmail(String recipientEmail, String subject, Invoice invoice, Double providedOffer) throws Exception {
 		
 
         Properties properties = new Properties();
@@ -76,6 +78,39 @@ public static String[] sendInvoiceEmail(String recipientEmail, String subject, I
             e.printStackTrace();
         }
         return new String[] {invoiceBody, pdfPath};
+    }
+    
+    
+    public static void sendVerificationEmail(String recipientEmail, String token, long user_id) {        
+        Properties properties = System.getProperties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2"); 
+        properties.put("mail.smtp.auth", "true");
+        VerificationService verificationService = new VerificationService();
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(from, password);
+            }
+        });
+        
+        try {
+            MimeMessage message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(from, "Super Market"));
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
+            message.setSubject("Email Verification");
+            
+            String verificationLink = "http://172.24.123.28:9000/SuperMarketBilling/verify?token=" + token+"&user_id="+user_id;
+            message.setContent("Please click the following link to verify your email: <a href='" + verificationLink + "'>Verify Email</a>", "text/html");
+            
+            Transport.send(message);
+            verificationService.saveVerificationCode(user_id, token);
+        } catch (MessagingException mex) {
+            mex.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
     }
     
 	 private static String generateInvoiceEmailBody(Invoice invoice, double providedOffer) {

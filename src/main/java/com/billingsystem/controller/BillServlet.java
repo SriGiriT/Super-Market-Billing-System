@@ -36,6 +36,11 @@ public class BillServlet extends HttpServlet {
         User user = (User) session.getAttribute("user"); 
         Long cashierUserId = null;
         double totalAmount = Double.parseDouble(request.getParameter("overallAmount"));
+        if(!user.isVerified()) {
+        	session.setAttribute("errorMessage", "Need to Verify Email before you proceed to buy!");
+        	response.sendRedirect("products");
+        	return;
+        }
         if(user.getRole().toString().equals("CASHIER")) {
         	LoggerUtil.getInstance().getLogger().debug("Is Cashier "+user.getId());
         	cashierUserId = user.getId();

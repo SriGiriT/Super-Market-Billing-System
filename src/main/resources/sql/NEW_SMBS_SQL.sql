@@ -22,7 +22,6 @@ select * from user;
 select * from customer;
 select * from admin;
 insert into customer (user_id) values(1);
-insert into 
 
 SELECT 
     u.id AS user_id,
@@ -42,7 +41,7 @@ LEFT JOIN
 LEFT JOIN 
     admin a ON u.id = a.user_id
 WHERE 
-    u.phone_number = "9344953235"; -- Replace :username with the input username
+    u.phone_number = "9344953235"; 
 SELECT     u.id,      u.name,    u.age,u.phone_number, u.password , 
 CASE    WHEN c.user_id IS NOT NULL THEN 'CUSTOMER'  WHEN a.user_id IS NOT NULL THEN 'ADMIN' 
        ELSE 'unknown' END AS role,   COALESCE(c.points, 0) AS points, 

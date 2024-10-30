@@ -34,7 +34,6 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );">
     %>
     
    
-    <p>You are logged in as <strong>${user.role}</strong>.</p>
 	<p>Information:<br/> Name: ${user.userName} <br/> Phone Number: ${user.phoneNumber} <br/>  Email: ${user.email} <br/>
 	<c:if test="${user.role == 'CUSTOMER' || user.role == 'INVENTORY_MANAGER'}">
 	    Credits: ${user.current_credit} <br/> 

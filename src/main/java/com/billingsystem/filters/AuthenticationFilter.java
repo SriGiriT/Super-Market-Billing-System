@@ -29,7 +29,7 @@ public class AuthenticationFilter implements Filter {
         HttpSession session = httpRequest.getSession(false);
         UserService userService = new UserService();
         Cookie[] cookies = httpRequest.getCookies();
-        if(httpRequest.getRequestURI().contains("signup") || httpRequest.getRequestURI().contains("/login") || httpRequest.getRequestURI().startsWith("style") || httpRequest.getRequestURI().contains("change_password") || httpRequest.getRequestURI().contains("changePassword")) {
+        if(httpRequest.getRequestURI().contains("signup") || httpRequest.getRequestURI().contains("/login") || httpRequest.getRequestURI().startsWith("style") || httpRequest.getRequestURI().contains("change_password") || httpRequest.getRequestURI().contains("changePassword") || httpRequest.getRequestURI().contains("verify")) {
         	chain.doFilter(request, response);
         	return;
         }

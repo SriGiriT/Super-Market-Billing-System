@@ -1,6 +1,7 @@
 package com.billingsystem.controller;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.billingsystem.Model.User;
 import com.billingsystem.service.UserService;
+import com.billingsystem.utility.EmailUtility;
 import com.billingsystem.utility.PasswordUtil;
 
 @WebServlet("/signup")
@@ -38,6 +40,7 @@ public class SignupServlet extends HttpServlet {
         
 
         UserService userService = new UserService();
+        
         
         Pattern pattern = Pattern.compile("\\d{10}");
         Matcher matcher = pattern.matcher(phoneNumber);
@@ -72,6 +75,7 @@ public class SignupServlet extends HttpServlet {
         	 boolean isRegistered = userService.createUser(user);
              if (isRegistered) {
              	session.setAttribute("successMessage", "Signed up Successfully!!!");
+             	EmailUtility.sendVerificationEmail(user.getEmail(), UUID.randomUUID().toString(), user.getId());
                  response.sendRedirect("login.jsp"); 
                  return;
              } else {

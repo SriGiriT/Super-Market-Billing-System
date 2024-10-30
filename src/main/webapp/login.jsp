@@ -188,7 +188,7 @@ backdrop-filter: blur( 20px );
 border-radius: 10px;
 border: 1px solid rgba( 255, 255, 255, 0.18 );" class="logsignform">
         <c:if test="${not empty successMessage}">
-            <h4 id="successMessage" style="display: flex; color: green; transition: opacity 1s ease-in-out; item-align:center; justify-content: center;">
+            <h4 id="successMessage" style="display: flex; color: green; transition: opacity 3s ease-in-out; item-align:center; justify-content: center;">
                 <c:out value="${successMessage}"/>
             </h4>
         </c:if>
@@ -232,7 +232,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="logsignform">
                 messageElement.style.opacity = '0';
                 setTimeout(function() {
                     messageElement.style.display = 'none';
-                }, 1000); 
+                }, 3000); 
             }
         }
 
