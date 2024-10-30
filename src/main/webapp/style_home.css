@@ -189,25 +189,7 @@ table td input {
 
 	}
 
-/* Responsive Styling */
-@media (max-width: 768px) {
-    .content-container, .product-section, .cart-section {
-        padding: 15px;
-    }
 
-    table, th, td {
-        font-size: 14px;
-        padding: 3px;
-    }
-
-    form input[type="text"],
-    form input[type="number"],
-    form select,
-    form button {
-        width: 100%;
-        margin: 8px 0;
-    }
-}
 select{
 	background: black ! important;
 	color:white;

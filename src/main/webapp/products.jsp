@@ -19,7 +19,7 @@ backdrop-filter: blur( 20px );
 -webkit-backdrop-filter: blur( 20px );
 border-radius: 10px;color:white;
 border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
-	<div class="product-section" style="width:1200px">
+	<div class="product-section" style="width:100%">
 	<span>Search Products</span>
     <form action="products" style="display:contents;">
         <select name="searchType" style="width:auto;">
@@ -150,7 +150,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
                         </tr>
                     </c:forEach>
                 </table>
-                <button type="submit" class="button-submit" style="margin-right: 300px;display:none;" id="addToCartButton">
+                <button type="submit" class="button-submit" style="margin-right: 300px;display:none;" id="addToCartButton" onclick="return showCartSection();">
                 <c:if test="${user.role=='INVENTORY_MANAGER'}">
                       Add to List
                 </c:if>
@@ -158,7 +158,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
                       Add to Cart
                 </c:if>
                 </button>
-                <div class="pagination" style="display:initial;position:sticky;left:500px;">
+                <div class="pagination" style="display:initial;position:sticky;left:40%;">
                 <c:if test="${currentPage > 1}">
                     <a href="?page=${currentPage - 1}">Previous</a>
                 </c:if>
@@ -235,7 +235,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
     </c:choose>
 	
     </div>
-    <div class="cart-section" id="cartSection" >
+    <div class="cart-section" id="cartSection" style="display:${not empty cart.items ? 'inline-block':'none'}" >
     <c:if test="${not empty cart.items}">
         <h2 style="color:white;">Selected Products</h2>
         <form action="UpdateCartServlet" method="post">
@@ -257,7 +257,7 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
                             <td>&#8377; <fmt:formatNumber value="${user.role == 'INVENTORY_MANAGER' ? item.product.buyerPrice * item.quantity : item.product.price * item.quantity}" type="currency"   currencySymbol="₹" pattern="#,##0.00"/></td>
                             <td>
                                 <input type="hidden" name="productIds" value="${item.product.id}" />
-                                <input type="number" name="quantities" class="input-quantity"  value="${item.quantity}" min="1" max="${user.role == 'INVENTORY_MANAGER' ? item.product.usualStock : item.product.stockLeft }" onchange="showUpdateButton()"/>
+                                <input type="number" name="quantities" class="input-quantity"  value="${item.quantity}" min="0" max="${user.role == 'INVENTORY_MANAGER' ? item.product.usualStock : item.product.stockLeft }" onchange="showUpdateButton()"/>
                             </td>
                         </tr>
                         <c:set var="overallAmount" value="${overallAmount + (user.role == 'INVENTORY_MANAGER' ? item.product.buyerPrice * item.quantity : item.product.price * item.quantity)}" />
@@ -347,6 +347,9 @@ border: 1px solid rgba( 255, 255, 255, 0.18 );" class="content-container">
     }
     function showAddToCartButton(){
     	document.getElementById("addToCartButton").style.display = "inline-block";
+    }
+    function showCartSection(){
+    	document.getElementById("cartSection").style.display = "inline-block";
     }
     </script>
 </body>
