@@ -80,7 +80,7 @@ public class EmailUtility {
         return new String[] {invoiceBody, pdfPath};
     }
     
-    
+    // Email Validation
     public static void sendVerificationEmail(String recipientEmail, String token, long user_id) {        
         Properties properties = System.getProperties();
         properties.put("mail.smtp.host", host);
